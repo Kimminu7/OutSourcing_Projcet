@@ -25,4 +25,10 @@ public class Review extends BaseTimeEntity {
     @Column(name="stars", nullable = false)
     private int stars;
 
+    public Review(Order order, String contents, int stars) {
+        this.order = order;
+        this.contents = contents;
+        this.stars = stars;
+    }
+
 }
