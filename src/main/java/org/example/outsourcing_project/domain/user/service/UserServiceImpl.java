@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.outsourcing_project.domain.user.dto.response.UserResponseDto;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.example.outsourcing_project.domain.user.entity.UserRole;
-import org.example.outsourcing_project.domain.user.repository.UserRespository;
+import org.example.outsourcing_project.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
-    private final UserRespository userRespository;
+    private final UserRepository userRespository;
 
     // 회원 가입
     @Transactional
