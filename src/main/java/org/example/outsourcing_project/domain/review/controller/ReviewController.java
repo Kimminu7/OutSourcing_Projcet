@@ -1,7 +1,9 @@
 package org.example.outsourcing_project.domain.review.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.example.outsourcing_project.domain.review.dto.request.ReviewRequestDto;
 import org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto;
 import org.example.outsourcing_project.domain.review.service.ReviewService;
@@ -19,9 +21,11 @@ public class ReviewController {
 
     @PostMapping("/{orderId}")
     public ResponseEntity<ReviewResponseDto> createReview (
-            @SessionAttribute("user") Long userId,
+            @RequestParam Long userId, //임시 유저ID
             @PathVariable Long orderId,
-            @Valid @RequestBody ReviewRequestDto requestDto) {
+            @Valid @RequestBody ReviewRequestDto requestDto
+    ){
+
         ReviewResponseDto reviewResponseDto = reviewService.createReview(userId, orderId, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewResponseDto);
     }
@@ -33,12 +37,22 @@ public class ReviewController {
     public ResponseEntity<List<ReviewResponseDto>> getReviewsByFilter (
             @RequestParam(required = false, defaultValue = "1") int min,
             @RequestParam(required = false, defaultValue = "5") int max,
-            @RequestParam(required = false, defaultValue = "newest") String order ){
+            @RequestParam(required = false, defaultValue = "newest") String order
+    ){
         List<ReviewResponseDto> result = reviewService.getReviewsByFilter(min, max, order);
         return ResponseEntity.ok(result);
     }
 
-    //@PatchMapping
+    //리뷰 수정
+    @PatchMapping("/{reviewId}")
+    public ResponseEntity<ReviewResponseDto> editReview (
+            @RequestParam Long userId, //임시 유저ID
+            @PathVariable Long reviewId,
+            @RequestBody ReviewRequestDto requestDto
+    ){
+        ReviewResponseDto result = reviewService.editReview(userId, reviewId, requestDto);
+        return ResponseEntity.ok(result);
+    }
 
     //@DeleteMapping
 }

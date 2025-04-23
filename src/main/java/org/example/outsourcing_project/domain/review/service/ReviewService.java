@@ -7,10 +7,8 @@ import org.example.outsourcing_project.domain.review.dto.request.ReviewRequestDt
 import org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto;
 import org.example.outsourcing_project.domain.review.entity.Review;
 import org.example.outsourcing_project.domain.review.repository.ReviewRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -40,7 +38,6 @@ public class ReviewService {
                     .orderMenu(order.getMenu().getMenuName())
                     .build();
         }
-
         throw new BaseException(ErrorCode.UNAUTHORIZED_REVIEW);
     }
 
@@ -48,4 +45,33 @@ public class ReviewService {
     public List<ReviewResponseDto> getReviewsByFilter(int min, int max, String order) {
 
     }
+
+    //리뷰 수정
+    public ReviewResponseDto editReview(Long currentUserId, Long reviewId, ReviewRequestDto requestDto){
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_REVIEW_ID));
+
+        Order order = review.getOrder();
+        User user = order.getUser();
+
+        if(currentUserId.equals(user.getUserId())){
+            if(requestDto.getStars() != null){
+                review.updateStars(requestDto.getStars());
+            }
+            if(requestDto.getContents() != null){
+                review.updateContents(requestDto.getContents());
+            }
+            return ReviewResponseDto.builder()
+                    .contents(review.getContents())
+                    .stars(review.getStars())
+                    .userName(user.getName())
+                    .createdAt(review.getCreatedAt())
+                    .updatedAt(review.getUpdatedAt())
+                    .orderMenu(order.getMenu().getMenuName())
+                    .build();
+        }
+        throw new BaseException(ErrorCode.UNAUTHORIZED_EDIT);
+    }
+
+    //리뷰 삭제
 }
