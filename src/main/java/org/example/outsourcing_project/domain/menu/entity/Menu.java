@@ -1,17 +1,20 @@
 package org.example.outsourcing_project.domain.menu.entity;
 
 import org.example.outsourcing_project.common.baseEntity.BaseEntity;
+import org.example.outsourcing_project.common.category.Category;
+import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,15 +32,27 @@ public class Menu extends BaseEntity {
 	@JoinColumn(name = "shop_id")
 	private Shop shop;
 
-	@NotBlank
-	private String category;
+	@Enumerated(EnumType.STRING)
+	private Category category;
 
-	@NotBlank
-	private String menuName;
+	@Column(nullable = false,length = 100)
+	private String name;
 
-	@NotNull
+	@Column(nullable = false)
 	private int price;
 
-	private Boolean status;
+	@Column(nullable = false)
+	private Boolean status = true;
+
+	public Menu(Shop shop, MenuCreateRequestDto dto) {
+
+		this.shop = shop;
+		this.category = dto.getCategory();
+		this.name = dto.getName();
+		this.price = dto.getPrice();
+		this.status = true;
+
+	}
+
 }
 
