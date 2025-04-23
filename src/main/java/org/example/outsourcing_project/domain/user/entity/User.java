@@ -2,9 +2,11 @@ package org.example.outsourcing_project.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.outsourcing_project.common.entity.BaseTimeEntity;
 
 @Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User extends BaseTimeEntity {
@@ -42,4 +44,5 @@ public class User extends BaseTimeEntity {
         this.address = address;
         this.role = role;
     }
+
 }

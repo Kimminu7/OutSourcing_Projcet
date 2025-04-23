@@ -3,6 +3,9 @@ package org.example.outsourcing_project.common.config;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
+/**
+ * 비밀번호 암호화를 위해 사용되는 클래스
+ */
 @Component
 public class PasswordEncoder {
 

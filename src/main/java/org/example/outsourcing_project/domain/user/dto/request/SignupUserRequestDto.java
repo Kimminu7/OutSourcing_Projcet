@@ -1,4 +1,4 @@
-package org.example.outsourcing_project.domain.user.dto;
+package org.example.outsourcing_project.domain.user.dto.request;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
