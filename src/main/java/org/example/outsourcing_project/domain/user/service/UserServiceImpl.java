@@ -1,6 +1,7 @@
 package org.example.outsourcing_project.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.outsourcing_project.common.config.PasswordEncoder;
 import org.example.outsourcing_project.domain.user.dto.response.UserResponseDto;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.example.outsourcing_project.domain.user.entity.UserRole;
@@ -15,17 +16,21 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRespository;
+    private final PasswordEncoder passwordEncoder;
 
     // 회원 가입
     @Transactional
     @Override
     public UserResponseDto Signup(String email, String password, String name, String address, UserRole role) {
 
-        User addUser = new User(email, password, name, address, role);
+        // 비밀번호 암호화
+        String encodePassword = passwordEncoder.encode(password);
+
+        User addUser = new User(email, encodePassword, name, address, role);
 
         User savedUser = userRespository.save(addUser);
 
-        return new UserResponseDto(savedUser.getUserId(), savedUser.getEmail(), savedUser.getPassword(), savedUser.getName(), savedUser.getAddress(), savedUser.getRole(), savedUser.getCreatedAt(), savedUser.getUpdatedAt());
+        return new UserResponseDto(savedUser.getUserId(), savedUser.getEmail(), encodePassword, savedUser.getName(), savedUser.getAddress(), savedUser.getRole(), savedUser.getCreatedAt(), savedUser.getUpdatedAt());
     }
 
     // 전체 유저 조회
