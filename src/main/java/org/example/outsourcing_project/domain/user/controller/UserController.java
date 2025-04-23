@@ -47,4 +47,6 @@ public class UserController {
         UserResponseDto responseDto = userService.update(userId, requestDto.getOldPassword(), requestDto.getNewPassword(), requestDto.getAddress(), requestDto.getRole());
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
+
+    // 회원 탈퇴
 }
