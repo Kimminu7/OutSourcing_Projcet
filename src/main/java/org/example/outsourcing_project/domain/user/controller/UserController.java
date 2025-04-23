@@ -3,6 +3,7 @@ package org.example.outsourcing_project.domain.user.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.outsourcing_project.domain.user.dto.request.SignupUserRequestDto;
+import org.example.outsourcing_project.domain.user.dto.request.UpdateUserRequestDto;
 import org.example.outsourcing_project.domain.user.dto.response.UserResponseDto;
 import org.example.outsourcing_project.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class UserController {
 
         UserResponseDto responseDto = userService.Signup(requestDto.getEmail(), requestDto.getPassword(), requestDto.getName(), requestDto.getAddress(), requestDto.getRole());
 
-        return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     // 전체 유저 조회
@@ -33,6 +34,17 @@ public class UserController {
 
         List<UserResponseDto> responseDtoList = userService.findAll();
 
-        return new ResponseEntity<>(responseDtoList,HttpStatus.OK);
+        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
+    }
+
+    // 회원 정보 수정
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UserResponseDto> update(
+            @PathVariable Long userId,
+            @RequestBody UpdateUserRequestDto requestDto
+    ) {
+
+        UserResponseDto responseDto = userService.update(userId, requestDto.getOldPassword(), requestDto.getNewPassword(), requestDto.getAddress(), requestDto.getRole());
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 }
