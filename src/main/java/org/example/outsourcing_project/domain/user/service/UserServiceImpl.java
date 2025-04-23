@@ -71,16 +71,17 @@ public class UserServiceImpl implements UserService{
 
         findUser.update(encodePassword, address, role);
 
-        User updatedUser = userRepository.save(findUser);
+        // DB에 실제로 반영하는 역할 (flush()) 중간에 DB에 저장해주는역할
+        userRepository.flush();
 
         return new UserResponseDto(
-                updatedUser.getUserId(),
-                updatedUser.getEmail(),
-                updatedUser.getName(),
-                updatedUser.getAddress(),
-                updatedUser.getRole(),
-                updatedUser.getCreatedAt(),
-                updatedUser.getUpdatedAt()
+                findUser.getUserId(),
+                findUser.getEmail(),
+                findUser.getName(),
+                findUser.getAddress(),
+                findUser.getRole(),
+                findUser.getCreatedAt(),
+                findUser.getUpdatedAt()
         );
     }
 }
