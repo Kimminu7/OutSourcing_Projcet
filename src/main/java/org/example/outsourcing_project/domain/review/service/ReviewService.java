@@ -24,21 +24,16 @@ public class ReviewService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_ORDER_ID));
 
+        User user = order.getUser();
+
         //현재 로그인된 유저와 주문의 유저가 같다면 리뷰 저장
-        if(currentUserId.equals(order.getUser().getUserId())){
+        if(currentUserId.equals(user.getUserId())){
             Review review = new Review(order, requestDto.getContents(), requestDto.getStars());
             Review savedReview = reviewRepository.save(review);
 
-            return ReviewResponseDto.builder()
-                    .contents(savedReview.getContents())
-                    .stars(savedReview.getStars())
-                    .userName(order.getUser().getName())
-                    .createdAt(savedReview.getCreatedAt())
-                    .updatedAt(savedReview.getUpdatedAt())
-                    .orderMenu(order.getMenu().getMenuName())
-                    .build();
+            return buildReviewResponseDto(savedReview, user, order);
         }
-        throw new BaseException(ErrorCode.UNAUTHORIZED_REVIEW);
+        throw new BaseException(ErrorCode.FORBIDDEN_REVIEW);
     }
 
     //리뷰 조회
@@ -47,6 +42,7 @@ public class ReviewService {
     }
 
     //리뷰 수정
+    @Transactional
     public ReviewResponseDto editReview(Long currentUserId, Long reviewId, ReviewRequestDto requestDto){
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_REVIEW_ID));
@@ -61,17 +57,32 @@ public class ReviewService {
             if(requestDto.getContents() != null){
                 review.updateContents(requestDto.getContents());
             }
-            return ReviewResponseDto.builder()
-                    .contents(review.getContents())
-                    .stars(review.getStars())
-                    .userName(user.getName())
-                    .createdAt(review.getCreatedAt())
-                    .updatedAt(review.getUpdatedAt())
-                    .orderMenu(order.getMenu().getMenuName())
-                    .build();
+            return buildReviewResponseDto(review, user, order);
         }
-        throw new BaseException(ErrorCode.UNAUTHORIZED_EDIT);
+        throw new BaseException(ErrorCode.FORBIDDEN_REVIEW_EDIT);
     }
 
     //리뷰 삭제
+    @Transactional
+    public void deleteReview(Long currentUserId, Long reviewId){
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_REVIEW_ID));
+
+        if(currentUserId.equals(review.getOrder().getUser().getUserId())){
+            reviewRepository.delete(review);
+        } else {
+            throw new BaseException(ErrorCode.FORBIDDEN_DELETE_REVIEW);
+        }
+    }
+
+    private ReviewResponseDto buildReviewResponseDto(Review review, User user, Order order) {
+        return ReviewResponseDto.builder()
+                .contents(review.getContents())
+                .stars(review.getStars())
+                .userName(user.getName())
+                .createdAt(review.getCreatedAt())
+                .updatedAt(review.getUpdatedAt())
+                .orderMenu(order.getMenu().getMenuName())
+                .build();
+    }
 }

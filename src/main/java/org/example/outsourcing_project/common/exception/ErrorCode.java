@@ -18,9 +18,9 @@ public enum ErrorCode {
 
     VALID_ERROR("VAILD가 유효하지 않습니다",HttpStatus.BAD_REQUEST,"400-001"),
 
-    UNAUTHORIZED_REVIEW("본인의 주문에만 리뷰를 작성할 수 있습니다.", HttpStatus.FORBIDDEN, "403-001"),
-    UNAUTHORIZED_EDIT("본인이 작성한 리뷰만 수정할 수 있습니다.", HttpStatus.FORBIDDEN, "403-002");
-
+    FORBIDDEN_REVIEW("본인의 주문에만 리뷰를 작성할 수 있습니다.", HttpStatus.FORBIDDEN, "403-001"),
+    FORBIDDEN_REVIEW_EDIT("본인의 리뷰만 수정할 수 있습니다.", HttpStatus.FORBIDDEN, "403-002"),
+    FORBIDDEN_DELETE_REVIEW("본인의 리뷰만 삭제할 수 있습니다.", HttpStatus.FORBIDDEN, "403-003s");
 
 
 

@@ -54,5 +54,13 @@ public class ReviewController {
         return ResponseEntity.ok(result);
     }
 
-    //@DeleteMapping
+    //리뷰 삭제
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Void> deleteReview (
+            @RequestParam Long userId, //임시 유저ID
+            @PathVariable Long reviewId
+    ){
+        ReviewResponseDto result = reviewService.deleteReview(userId, reviewId);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
 }
