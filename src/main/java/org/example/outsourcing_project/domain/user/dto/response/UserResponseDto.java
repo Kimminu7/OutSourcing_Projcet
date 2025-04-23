@@ -40,6 +40,8 @@ public class UserResponseDto {
                 user.getName(),
                 user.getAddress(),
                 user.getRole(),
-                user.getCreatedAt(), user.getUpdatedAt());
+                user.getCreatedAt(),
+                user.getUpdatedAt()
+        );
     }
 }
