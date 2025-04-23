@@ -26,8 +26,10 @@ public class MenuController {
 
 		// TODO test를 위해 userId 하드코딩으로 나중에 수정 필요
 		Long userId = 1L;
-		MenuCreateResponseDto MenuCreateResponseDto = menuService.createMenu(userId,shopId,requestDto);
+		MenuCreateResponseDto menuCreateResponseDto = menuService.createMenu(userId,shopId,requestDto);
 
-		return new ResponseEntity<>(MenuCreateResponseDto,HttpStatus.OK);
+		return new ResponseEntity<>(menuCreateResponseDto,HttpStatus.OK);
 	}
+
+
 }
