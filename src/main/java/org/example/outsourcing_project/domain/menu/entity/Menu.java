@@ -1,4 +1,7 @@
-package org.example.outsourcing_project.menu;
+package org.example.outsourcing_project.domain.menu.entity;
+
+import org.example.outsourcing_project.common.baseEntity.BaseEntity;
+import org.example.outsourcing_project.domain.shop.entity.Shop;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,7 +27,7 @@ public class Menu extends BaseEntity {
 	// shopentity 확인 후 수정 필요
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "shop_id")
-	private ShopEntity shop;
+	private Shop shop;
 
 	@NotBlank
 	private String category;
