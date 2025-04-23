@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService{
 
         User savedUser = userRespository.save(addUser);
 
-        return new UserResponseDto(savedUser.getEmail(), savedUser.getPassword(), savedUser.getName(), savedUser.getAddress(), savedUser.getRole(), savedUser.getCreatedAt(), savedUser.getUpdatedAt());
+        return new UserResponseDto(savedUser.getUserId(), savedUser.getEmail(), savedUser.getPassword(), savedUser.getName(), savedUser.getAddress(), savedUser.getRole(), savedUser.getCreatedAt(), savedUser.getUpdatedAt());
     }
 
     // 전체 유저 조회
