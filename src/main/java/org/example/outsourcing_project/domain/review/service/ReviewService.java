@@ -1,6 +1,8 @@
 package org.example.outsourcing_project.domain.review.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.outsourcing_project.common.exception.ErrorCode;
+import org.example.outsourcing_project.common.exception.custom.BaseException;
 import org.example.outsourcing_project.domain.review.dto.request.ReviewRequestDto;
 import org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto;
 import org.example.outsourcing_project.domain.review.entity.Review;
@@ -22,7 +24,7 @@ public class ReviewService {
     @Transactional
     public ReviewResponseDto createReview(Long currentUserId, Long orderId, ReviewRequestDto requestDto){
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "주문을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_ORDER_ID));
 
         //현재 로그인된 유저와 주문의 유저가 같다면 리뷰 저장
         if(currentUserId.equals(order.getUser().getUserId())){
@@ -39,7 +41,7 @@ public class ReviewService {
                     .build();
         }
 
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 주문에만 리뷰를 작성할 수 있습니다.");
+        throw new BaseException(ErrorCode.UNAUTHORIZED_REVIEW);
     }
 
     //리뷰 조회
