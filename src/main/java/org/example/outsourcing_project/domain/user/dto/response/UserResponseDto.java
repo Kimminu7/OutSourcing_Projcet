@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Getter
 public class UserResponseDto {
 
+    private final Long userId;
+
     private final String email;
 
     private final String password;
@@ -23,7 +25,8 @@ public class UserResponseDto {
 
     private final LocalDateTime updatedAt;
 
-    public UserResponseDto(String email, String password, String name, String address, UserRole role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public UserResponseDto(Long userId, String email, String password, String name, String address, UserRole role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.userId = userId;
         this.email = email;
         this.password = password;
         this.name = name;
@@ -35,12 +38,12 @@ public class UserResponseDto {
 
     public static UserResponseDto toDto(User user) {
         return new UserResponseDto(
+                user.getUserId(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getName(),
                 user.getAddress(),
                 user.getRole(),
-                user.getCreatedAt(),
-                user.getUpdatedAt());
+                user.getCreatedAt(), user.getUpdatedAt());
     }
 }
