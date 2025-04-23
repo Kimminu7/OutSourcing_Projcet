@@ -1,0 +1,28 @@
+package org.example.outsourcing_project.domain.review.entity;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.example.outsourcing_project.common.entity.BaseTimeEntity;
+
+@Getter
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "review")
+public class Review extends BaseTimeEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long reviewId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    @Column(name="contents", nullable = true, length = 255)
+    private String contents;
+
+    @Column(name="stars", nullable = false)
+    private int stars;
+
+}
