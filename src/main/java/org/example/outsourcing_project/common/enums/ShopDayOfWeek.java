@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.outsourcing_project.common.converter.DayOfWeekDeserializer;
 
-import java.time.DayOfWeek;
 import java.util.Arrays;
 
 @AllArgsConstructor

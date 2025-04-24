@@ -1,38 +1,44 @@
 package org.example.outsourcing_project.domain.shop.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import org.example.outsourcing_project.domain.shop.dto.request.ShopPatchRequestDto;
+import lombok.NoArgsConstructor;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
-import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.security.core.userdetails.User;
+import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
 
 import java.util.List;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShopWithMenuResponse {
     private String storeName;
     private String address;
-    private boolean open;
+    private ShopStatus shopStatus;
     private double star;
     private long minDeliverPrice;
-    private List<MenuItem> menu;
+    private List<MenuItem> menus;
 
     public static class MenuItem {
         private String menuName;
         private int price;
-        MenuItem(String menuName,int price){
+
+        public MenuItem(String menuName, int price){
             this.menuName=menuName;
             this.price=price;
         }
     }
-    public ShopWithMenuResponse(String storeName, String address, boolean open, double star, long minDeliverPrice){
-        this.address=address;
-        this.storeName=storeName;
-        this.open=open;
-        this.minDeliverPrice=minDeliverPrice;
-        this.star=star;
+    public static ShopWithMenuResponse from(Shop shop,List<MenuItem> menuItems){
+        return ShopWithMenuResponse.builder()
+                .storeName(shop.getShopName())
+                .address(shop.getAddress())
+                .shopStatus(shop.getShopStatus())
+                .star(shop.getStars())
+                .minDeliverPrice(shop.getMinDeliveryPrice())
+                .menus(menuItems)
+                .build();
     }
 }
 

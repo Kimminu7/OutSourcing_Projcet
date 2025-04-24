@@ -1,12 +1,9 @@
 package org.example.outsourcing_project.domain.shop.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter

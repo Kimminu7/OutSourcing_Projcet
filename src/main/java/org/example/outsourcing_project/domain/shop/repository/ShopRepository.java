@@ -4,6 +4,7 @@ import org.example.outsourcing_project.common.enums.Category;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ public interface ShopRepository extends JpaRepository<Shop,Long> {
     }
 
     List<Shop> findShopByCategory(Category category);
+
+    @Query("SELECT count(s.shopId) FROM Shop s WHERE s.user.userId = :userId")
+    int countShopByUserId(@Param("userId") Long userId);
 
 
 }

@@ -2,51 +2,53 @@ package org.example.outsourcing_project.domain.shop.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.example.outsourcing_project.common.baseEntity.BaseEntity;
 import org.example.outsourcing_project.common.enums.Category;
-import org.example.outsourcing_project.common.enums.DayOfWeek;
 import org.example.outsourcing_project.common.enums.ShopDayOfWeek;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopPatchRequestDto;
-import org.example.outsourcing_project.domain.shop.dto.request.ShopRequestDto;
+import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
+import org.example.outsourcing_project.domain.user.entity.User;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
-import java.awt.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
+@Builder
 @Entity
 @Table(name = "shops")
+@SQLDelete(sql = "UPDATE shops SET shop_status = 'CLOSED_PERMANENTLY' WHERE shop_id = ?")//소프트
+@SQLRestriction("store_status != 'CLOSED_PERMANENTLY'")//where의 대안책
 public class Shop extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shopId;
 
     @Column(nullable = false,length = 100)
-    private String storeName;
+    private String shopName;
     @Column(nullable = false)
     private String address;
     @Column(nullable = false)
-    private String storeNumber;
+    private String shopNumber;
 
     @Column(nullable = false)
     private long minDeliveryPrice = 0L;
 
-    @Column(nullable = false)
-    private LocalTime startTime;
-    @Column(nullable = false)
-    private LocalTime endTime;
+    @Embedded
+    private OperatingHours operatingHours;
 
     @Column(nullable = false)
     @Setter
     private double stars=0;
 
-    private LocalDateTime status;
+    @Enumerated(EnumType.STRING)
+    private ShopStatus shopStatus;
 
     @ElementCollection(targetClass = ShopDayOfWeek.class)
     @CollectionTable(name = "shop_closed_days", joinColumns = @JoinColumn(name = "shop_id"))
@@ -61,34 +63,31 @@ public class Shop extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Shop(User user, ShopRequestDto shopRequestDto){
-        this.user = user;
-        this.storeName = shopRequestDto.getStoreName();
-        this.storeNumber = shopRequestDto.getStoreNumber();
-        this.address = shopRequestDto.getAddress();
-        this.category = shopRequestDto.getCategory();
-        this.closedDays = shopRequestDto.getClosedDays();
-        this.startTime = shopRequestDto.getStartTime();
-        this.endTime = shopRequestDto.getEndTime();
-        this.minDeliveryPrice = shopRequestDto.getMinDeliveryPrice();
-    }
-
     public Shop update(ShopPatchRequestDto shopPatchRequestDto){
         if (shopPatchRequestDto.getStoreNumber() != null){
-            this.storeNumber = shopPatchRequestDto.getStoreNumber();
-        }
-        if (shopPatchRequestDto.getEndTime() != null){
-            this.endTime = shopPatchRequestDto.getEndTime();
+            this.shopNumber = shopPatchRequestDto.getStoreNumber();
         }
         if (shopPatchRequestDto.getMinDeliveryPrice() != null){
             this.minDeliveryPrice = shopPatchRequestDto.getMinDeliveryPrice();
         }
-        if (shopPatchRequestDto.getStartTime() != null){
-            this.startTime = shopPatchRequestDto.getStartTime();
-        }
+        this.operatingHours.updateCloseTime(shopPatchRequestDto.getEndTime());
+        this.operatingHours.updateOpenTime(shopPatchRequestDto.getStartTime());
 
         setUpdatedAt(LocalDateTime.now());
         return this;
+    }
+    public ShopStatus getCurrentShopStatus() {
+        LocalTime now = LocalTime.now();
+        ShopDayOfWeek today = ShopDayOfWeek.of(LocalDate.now().getDayOfWeek().name());
+        if (shopStatus.equals(ShopStatus.CLOSED_PERMANENTLY)){
+            return ShopStatus.CLOSED_PERMANENTLY;
+        }
+        if (!getClosedDays().contains(today) &&
+                now.isAfter(getOperatingHours().getOpenTime()) &&
+                now.isBefore(getOperatingHours().getCloseTime())){
+            return ShopStatus.OPEN;
+        }
+        return ShopStatus.CLOSED;
     }
 
 }

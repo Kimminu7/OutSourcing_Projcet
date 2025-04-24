@@ -1,4 +1,4 @@
-package org.example.outsourcing_project.common.baseEntity;
+package org.example.outsourcing_project.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

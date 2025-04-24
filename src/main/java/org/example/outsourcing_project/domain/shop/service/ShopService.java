@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public interface ShopService {
-    ShopResponseDto saveShop(AuthUser authUser, ShopRequestDto requestDto);
+    ShopResponseDto saveShop(Long userid, ShopRequestDto requestDto);
 
     List<ShopResponseDto> findAllShop(Category category);
 
@@ -20,7 +20,5 @@ public interface ShopService {
     ShopResponseDto patchShop(Long shopId, ShopPatchRequestDto shopPatchRequestDto);
 
     void deleteShop(Long shopId);
-
-    void setStarInShop();
 
 }

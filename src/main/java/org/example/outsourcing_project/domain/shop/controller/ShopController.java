@@ -8,10 +8,8 @@ import org.example.outsourcing_project.domain.shop.dto.request.ShopRequestDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopResponseDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopWithMenuResponse;
 import org.example.outsourcing_project.domain.shop.service.ShopService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,12 +21,13 @@ public class ShopController {
     private final ShopService shopService;
 
     @PostMapping()
-    public ResponseEntity<ShopResponseDto> saveShop(@Auth AuthUser authUser,
+    public ResponseEntity<ShopResponseDto> saveShop(
                                                     @Valid @RequestBody ShopRequestDto requestDto) {
-        if (!ObjectUtils.nullSafeEquals(authUser.getUserRole(), UsesRole.ADMIN)) {
-            throw new RuntimeException("사장님 왜 이렇게 돈을 많이 넣어주셨어요");
-        }
-        return new ResponseEntity<>(shopService.saveShop(authUser, requestDto), HttpStatus.CREATED);
+//        if (!ObjectUtils.nullSafeEquals(authUser.getUserRole(), UsesRole.ADMIN)) {
+//            throw new RuntimeException("사장님 왜 이렇게 돈을 많이 넣어주셨어요");
+//        }
+        Long userId=1l;
+        return new ResponseEntity<>(shopService.saveShop(userId, requestDto), HttpStatus.CREATED);
     }
 
     @GetMapping()
@@ -42,32 +41,31 @@ public class ShopController {
     }
 
     @PatchMapping("/{shopId}")
-    public ResponseEntity<ShopResponseDto> patchShop(@Auth AuthUser authUser,
+    public ResponseEntity<ShopResponseDto> patchShop(
                                                      @PathVariable Long shopId,
                                                      @RequestBody ShopPatchRequestDto shopPatchRequestDto) {
-        if (!ObjectUtils.nullSafeEquals(authUser.getUserRole(), UsesRole.ADMIN)) {
-            throw new RuntimeException("사장님 왜 이렇게 돈을 많이 넣어주셨어요");
-        }
-        if (!ObjectUtils.nullSafeEquals(shopId, authUser.getId())) {
-            throw new RuntimeException("사장님이 아니잖아 당신 누구야 당신누구야!!!!!!!");
-        }
+//        @Auth AuthUser authUser,
+//        if (!ObjectUtils.nullSafeEquals(authUser.getUserRole(), UsesRole.ADMIN)) {
+//            throw new RuntimeException("사장님 왜 이렇게 돈을 많이 넣어주셨어요");
+//        }
+//        if (!ObjectUtils.nullSafeEquals(shopId, authUser.getId())) {
+//            throw new RuntimeException("사장님이 아니잖아 당신 누구야 당신누구야!!!!!!!");
+//        }
         return new ResponseEntity<>(shopService.patchShop(shopId, shopPatchRequestDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{shopId}")
-    public ResponseEntity<Void> deleteShop(@Auth AuthUser authUser,
+    public ResponseEntity<Void> deleteShop(
                                            @PathVariable Long shopId) {
-        if (!ObjectUtils.nullSafeEquals(authUser.getUserRole(), UsesRole.ADMIN)) {
-            throw new RuntimeException("사장님 왜 이렇게 돈을 많이 넣어주셨어요");
-        }
-        if (!ObjectUtils.nullSafeEquals(shopId, authUser.getId())) {
-            throw new RuntimeException("사장님이 아니잖아 당신 누구야 당신누구야!!!!!!!");
-        }
+//        (@Auth AuthUser authUser,
+//        if (!ObjectUtils.nullSafeEquals(authUser.getUserRole(), UsesRole.ADMIN)) {
+//            throw new RuntimeException("사장님 왜 이렇게 돈을 많이 넣어주셨어요");
+//        }
+//        if (!ObjectUtils.nullSafeEquals(shopId, authUser.getId())) {
+//            throw new RuntimeException("사장님이 아니잖아 당신 누구야 당신누구야!!!!!!!");
+//        }
         shopService.deleteShop(shopId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 
-
-
-}
