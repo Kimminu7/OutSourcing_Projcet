@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -63,7 +62,7 @@ public class UserServiceImpl implements UserService{
          * 비교해주는 matches 메소드를 활용 (트러블 슈팅)
          */
         if(!passwordEncoder.matches(oldPassword, findUser.getPassword())) {
-            throw new RuntimeException("기존 비밀번호가 일치하지 않습니다.");
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 
         // 비밀번호 암호화
@@ -87,9 +86,13 @@ public class UserServiceImpl implements UserService{
 
     // 회원 탈퇴
     @Override
-    public void delete(Long userId) {
+    public void delete(Long userId, String password) {
 
         User findUser = userRepository.findByIdOrElseThrow(userId);
+
+        if(!passwordEncoder.matches(password, findUser.getPassword())){
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
 
         userRepository.delete(findUser);
     }
