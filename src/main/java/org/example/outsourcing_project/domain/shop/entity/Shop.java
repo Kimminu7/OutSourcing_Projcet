@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.outsourcing_project.common.baseEntity.BaseEntity;
 import org.example.outsourcing_project.common.enums.Category;
 import org.example.outsourcing_project.common.enums.DayOfWeek;
@@ -42,7 +43,8 @@ public class Shop extends BaseEntity {
     private LocalTime endTime;
 
     @Column(nullable = false)
-    private int stars=0;
+    @Setter
+    private double stars=0;
 
     private LocalDateTime status;
 

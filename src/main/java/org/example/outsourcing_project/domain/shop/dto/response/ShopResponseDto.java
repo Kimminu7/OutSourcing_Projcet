@@ -8,7 +8,7 @@ public class ShopResponseDto {
     private String storeName;
     private String address;
     private boolean open;
-    private int star;
+    private double star;
     private long minDeliverPrice;
 
 }
