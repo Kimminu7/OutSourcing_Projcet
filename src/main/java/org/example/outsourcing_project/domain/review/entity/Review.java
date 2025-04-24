@@ -5,11 +5,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.outsourcing_project.common.entity.BaseTimeEntity;
+import org.example.outsourcing_project.domain.order.entity.Order;
+
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "review")
+@Table(name = "reviews")
 public class Review extends BaseTimeEntity {
 
     @Id

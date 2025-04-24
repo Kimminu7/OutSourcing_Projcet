@@ -3,10 +3,14 @@ package org.example.outsourcing_project.domain.review.service;
 import lombok.RequiredArgsConstructor;
 import org.example.outsourcing_project.common.exception.ErrorCode;
 import org.example.outsourcing_project.common.exception.custom.BaseException;
+import org.example.outsourcing_project.domain.order.entity.Order;
+import org.example.outsourcing_project.domain.order.repository.OrderRepository;
 import org.example.outsourcing_project.domain.review.dto.request.ReviewRequestDto;
 import org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto;
 import org.example.outsourcing_project.domain.review.entity.Review;
 import org.example.outsourcing_project.domain.review.repository.ReviewRepository;
+import org.example.outsourcing_project.domain.user.entity.User;
+import org.example.outsourcing_project.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +23,7 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
     //리뷰 작성
     @Transactional
@@ -26,7 +31,7 @@ public class ReviewService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_ORDER_ID));
 
-        User user = order.getUser();
+        User user = userRepository.findById(order.getUserId()).orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER_ID));
 
         //현재 로그인된 유저와 주문의 유저가 같다면 리뷰 저장
         if(currentUserId.equals(user.getUserId())){
@@ -58,7 +63,7 @@ public class ReviewService {
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_REVIEW_ID));
 
         Order order = review.getOrder();
-        User user = order.getUser();
+        User user = userRepository.findById(order.getUserId()).orElseThrow();
 
         if(currentUserId.equals(user.getUserId())){
             if(requestDto.getStars() != null){
@@ -78,7 +83,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_REVIEW_ID));
 
-        if(currentUserId.equals(review.getOrder().getUser().getUserId())){
+        if(currentUserId.equals(review.getOrder().getUserId())){
             reviewRepository.delete(review);
         } else {
             throw new BaseException(ErrorCode.FORBIDDEN_DELETE_REVIEW);

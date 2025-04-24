@@ -13,11 +13,11 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository <Review, Long> {
 
     @Query("SELECT " +
-            "new org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto(r.contents, r.stars, u.name, r.createdAt, r.updatedAt, m.menuName) "+
+            "new org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto(r.contents, r.stars, u.name, m.menu_name, r.createdAt, r.updatedAt) "+
             "FROM Review r "+
             "JOIN r.order o "+
-            "JOIN o.user u "+
-            "JOIN o.menu m "+
+            "JOIN User u ON u.userId = o.userId " +
+            "JOIN Menu m ON m.menuId = o.menuId " +
             "WHERE r.stars BETWEEN :min AND :max ")
     List<ReviewResponseDto> getReviewsByFilter(
             @Param("min") Integer min,

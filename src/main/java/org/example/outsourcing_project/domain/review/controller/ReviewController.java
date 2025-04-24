@@ -63,7 +63,7 @@ public class ReviewController {
             @RequestParam Long userId, //임시 유저ID
             @PathVariable Long reviewId
     ){
-        ReviewResponseDto result = reviewService.deleteReview(userId, reviewId);
+        reviewService.deleteReview(userId, reviewId);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 }
