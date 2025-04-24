@@ -2,6 +2,7 @@ package org.example.outsourcing_project.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.outsourcing_project.common.jwt.LoginUser;
 import org.example.outsourcing_project.domain.user.dto.request.DeleteUserRequestDto;
 import org.example.outsourcing_project.domain.user.dto.request.SignupUserRequestDto;
 import org.example.outsourcing_project.domain.user.dto.request.UpdateUserRequestDto;
@@ -39,9 +40,9 @@ public class UserController {
     }
 
     // 회원 정보 수정
-    @PatchMapping("/{userId}")
+    @PatchMapping
     public ResponseEntity<UserResponseDto> update(
-            @PathVariable Long userId,
+            @LoginUser Long userId,
             @RequestBody UpdateUserRequestDto requestDto
     ) {
 
@@ -50,9 +51,9 @@ public class UserController {
     }
 
     // 회원 탈퇴
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     public ResponseEntity<Void> delete(
-            @PathVariable Long userId,
+            @LoginUser Long userId,
             @RequestBody DeleteUserRequestDto requestDto
     ) {
 
