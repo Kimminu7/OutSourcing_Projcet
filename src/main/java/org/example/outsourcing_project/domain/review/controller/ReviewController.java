@@ -1,9 +1,9 @@
 package org.example.outsourcing_project.domain.review.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
+import org.example.outsourcing_project.common.exception.ErrorCode;
+import org.example.outsourcing_project.common.exception.custom.BaseException;
 import org.example.outsourcing_project.domain.review.dto.request.ReviewRequestDto;
 import org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto;
 import org.example.outsourcing_project.domain.review.service.ReviewService;
@@ -37,8 +37,11 @@ public class ReviewController {
     public ResponseEntity<List<ReviewResponseDto>> getReviewsByFilter (
             @RequestParam(required = false, defaultValue = "1") int min,
             @RequestParam(required = false, defaultValue = "5") int max,
-            @RequestParam(required = false, defaultValue = "newest") String order
+            @RequestParam(required = false, defaultValue = "desc") String order
     ){
+        if(!order.equals("desc") && !order.equals("asc")){
+            throw new BaseException(ErrorCode.INVALID_SORT_ORDER);
+        }
         List<ReviewResponseDto> result = reviewService.getReviewsByFilter(min, max, order);
         return ResponseEntity.ok(result);
     }

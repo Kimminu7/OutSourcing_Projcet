@@ -17,6 +17,7 @@ public enum ErrorCode {
     NOT_FOUND_REVIEW_ID("리뷰를 찾을 수 없습니다.", HttpStatus.NOT_FOUND, "404-008"),
 
     VALID_ERROR("VAILD가 유효하지 않습니다",HttpStatus.BAD_REQUEST,"400-001"),
+    INVALID_SORT_ORDER("정렬 키워드가 올바르지 않습니다.", HttpStatus.BAD_REQUEST, "400-002"),
 
     FORBIDDEN_REVIEW("본인의 주문에만 리뷰를 작성할 수 있습니다.", HttpStatus.FORBIDDEN, "403-001"),
     FORBIDDEN_REVIEW_EDIT("본인의 리뷰만 수정할 수 있습니다.", HttpStatus.FORBIDDEN, "403-002"),

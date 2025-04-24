@@ -7,9 +7,11 @@ import org.example.outsourcing_project.domain.review.dto.request.ReviewRequestDt
 import org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto;
 import org.example.outsourcing_project.domain.review.entity.Review;
 import org.example.outsourcing_project.domain.review.repository.ReviewRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,7 +40,15 @@ public class ReviewService {
 
     //리뷰 조회
     public List<ReviewResponseDto> getReviewsByFilter(int min, int max, String order) {
+        List<ReviewResponseDto> listResponseDto = new ArrayList<>();
 
+        if(order.equals("desc")){
+            listResponseDto = reviewRepository.getReviewsByFilter(min, max, Sort.by("createdAt").descending());
+        } else if (order.equals("asc")){
+            listResponseDto = reviewRepository.getReviewsByFilter(min, max, Sort.by("createdAt").ascending());
+        }
+
+        return listResponseDto;
     }
 
     //리뷰 수정
@@ -82,7 +92,7 @@ public class ReviewService {
                 .userName(user.getName())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
-                .orderMenu(order.getMenu().getMenuName())
+                .menuName(order.getMenu().getMenuName())
                 .build();
     }
 }

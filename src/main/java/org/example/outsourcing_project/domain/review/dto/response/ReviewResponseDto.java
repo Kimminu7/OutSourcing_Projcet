@@ -13,5 +13,5 @@ public class ReviewResponseDto {
     private final String userName;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
-    private final String orderMenu;
+    private final String menuName;
 }
