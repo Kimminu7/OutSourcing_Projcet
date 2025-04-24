@@ -1,13 +1,18 @@
-package org.example.outsourcing_project.common.category;
+package org.example.outsourcing_project.common.enums;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.example.outsourcing_project.common.converter.DayOfWeekDeserializer;
 
+import java.time.DayOfWeek;
 import java.util.Arrays;
 
 @AllArgsConstructor
 @Getter
-public enum DayOfWeek {
+
+@JsonDeserialize(using = DayOfWeekDeserializer.class)
+public enum ShopDayOfWeek {
     MONDAY("월요일"),
     TUESDAY("화요일"),
     WEDNESDAY("수요일"),
@@ -18,7 +23,7 @@ public enum DayOfWeek {
 
     public final String label;
 
-    public static DayOfWeek of(String input) {
+    public static ShopDayOfWeek of(String input) {
         return Arrays.stream(values())
                 .filter(d -> d.name().equalsIgnoreCase(input) || d.label.equalsIgnoreCase(input))
                 .findFirst()
