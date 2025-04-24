@@ -6,7 +6,6 @@ import org.example.outsourcing_project.domain.user.dto.response.UserResponseDto;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.example.outsourcing_project.domain.user.entity.UserRole;
 import org.example.outsourcing_project.domain.user.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +29,7 @@ public class UserServiceImpl implements UserService{
 
         if(findUserEmail.isPresent()) {
             User existUser = findUserEmail.get(); // Optional get() 사용하면 객체에 접근가능함.
-
+            // 이미 탈퇴한 사용자 이면 재가입 불가능
             if(existUser.isDeleted()) {
                 throw new RuntimeException("이미 탈퇴한 회원입니다. 재가입이 불가능합니다.");
             }
@@ -51,7 +50,8 @@ public class UserServiceImpl implements UserService{
                 savedUser.getAddress(),
                 savedUser.getRole(),
                 savedUser.getCreatedAt(),
-                savedUser.getUpdatedAt());
+                savedUser.getUpdatedAt()
+        );
     }
 
     // 전체 유저 조회

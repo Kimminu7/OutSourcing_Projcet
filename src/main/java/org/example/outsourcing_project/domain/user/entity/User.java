@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.outsourcing_project.common.entity.BaseTimeEntity;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor
 @Entity
@@ -48,12 +46,14 @@ public class User extends BaseTimeEntity {
         this.address = address;
         this.role = role;
     }
+
     // 회원 정보 수정시 사용되는 메소드
     public void update(String password, String address, UserRole role) {
         this.password = password;
         this.address = address;
         this.role = role;
     }
+
     // 회원 탈퇴시 메소드 사용 ( true가 되면 같은 명으로 다시 회원가입 불가능 )
     public void deleteUser() {
         this.isDeleted = true;
