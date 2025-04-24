@@ -3,6 +3,7 @@ package org.example.outsourcing_project.domain.menu.entity;
 import org.example.outsourcing_project.common.baseEntity.BaseEntity;
 import org.example.outsourcing_project.common.category.Category;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
+import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
 
 import jakarta.persistence.Column;
@@ -52,6 +53,12 @@ public class Menu extends BaseEntity {
 		this.price = dto.getPrice();
 		this.status = true;
 
+	}
+
+	public void update(MenuUpdateRequestDto requestDto){
+		this.name = requestDto.getName();
+		this.price = requestDto.getPrice();
+		this.category = requestDto.getCategory();
 	}
 
 }
