@@ -16,7 +16,7 @@ public class MenuCreateResponseDto {
 	private Category category;
 	private Boolean status;
 
-	// User엔티티 Getter 없음 이슈...
+
 	public MenuCreateResponseDto(Menu menu) {
 		this.menuId = menu.getId();
 		this.shopId = menu.getShop().getShopId();

@@ -1,11 +1,15 @@
 package org.example.outsourcing_project.domain.menu.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.example.outsourcing_project.common.baseEntity.BaseEntity;
 import org.example.outsourcing_project.common.category.Category;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,6 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,7 +33,6 @@ public class Menu extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	// shopentity 확인 후 수정 필요
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "shop_id")
 	private Shop shop;
@@ -44,6 +48,9 @@ public class Menu extends BaseEntity {
 
 	@Column(nullable = false)
 	private Boolean status = true;
+
+	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<MenuOption> menuOptions = new ArrayList<>();
 
 	public Menu(Shop shop, MenuCreateRequestDto dto) {
 
