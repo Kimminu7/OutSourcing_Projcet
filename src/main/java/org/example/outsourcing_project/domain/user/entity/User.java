@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.outsourcing_project.common.entity.BaseTimeEntity;
+import org.example.outsourcing_project.domain.user.UserRole;
 
 @Getter
 @NoArgsConstructor

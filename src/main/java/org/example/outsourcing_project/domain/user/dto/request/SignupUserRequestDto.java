@@ -3,7 +3,7 @@ package org.example.outsourcing_project.domain.user.dto.request;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.outsourcing_project.domain.user.entity.UserRole;
+import org.example.outsourcing_project.domain.user.UserRole;
 
 @Getter
 @AllArgsConstructor
