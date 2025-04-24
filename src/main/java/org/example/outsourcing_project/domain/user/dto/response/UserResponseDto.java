@@ -1,5 +1,6 @@
 package org.example.outsourcing_project.domain.user.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.example.outsourcing_project.domain.user.entity.UserRole;
@@ -7,6 +8,7 @@ import org.example.outsourcing_project.domain.user.entity.UserRole;
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 public class UserResponseDto {
 
     private final Long userId;
@@ -22,16 +24,6 @@ public class UserResponseDto {
     private final LocalDateTime createdAt;
 
     private final LocalDateTime updatedAt;
-
-    public UserResponseDto(Long userId, String email, String name, String address, UserRole role, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.userId = userId;
-        this.email = email;
-        this.name = name;
-        this.address = address;
-        this.role = role;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 
     public static UserResponseDto toDto(User user) {
         return new UserResponseDto(
