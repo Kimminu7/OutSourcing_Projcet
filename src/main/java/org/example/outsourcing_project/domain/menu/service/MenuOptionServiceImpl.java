@@ -65,6 +65,11 @@ public class MenuOptionServiceImpl implements MenuOptionService {
 		if (!menuOption.getMenu().getId().equals(menu.getId())) {
 			throw new IllegalArgumentException("이 메뉴에 없는 옵션입니다.");
 		}
+
+		if (!menuOption.isStatus()){
+			throw new IllegalArgumentException("이미 삭제된 옵션입니다.");
+		}
+
 		menuOption.softDelete();
 	}
 }

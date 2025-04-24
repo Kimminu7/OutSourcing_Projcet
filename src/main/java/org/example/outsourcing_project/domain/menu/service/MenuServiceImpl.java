@@ -62,6 +62,10 @@ public class MenuServiceImpl implements MenuService{
 		Menu menu = menuRepository.findByIdAndShop_ShopId(menuid, shopid)
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
+		if (!menu.getStatus()){
+			throw new IllegalArgumentException("이미 삭제된 메뉴입니다.");
+		}
+
 		menu.softDelete();
 
 	}
