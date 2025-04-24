@@ -1,10 +1,13 @@
 package org.example.outsourcing_project.domain.menu.controller;
 
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
+import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuCreateResponseDto;
+import org.example.outsourcing_project.domain.menu.dto.response.MenuUpdateResponseDto;
 import org.example.outsourcing_project.domain.menu.service.MenuService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,5 +34,13 @@ public class MenuController {
 		return new ResponseEntity<>(menuCreateResponseDto,HttpStatus.OK);
 	}
 
+	@PatchMapping("/menus/{menuId}")
+	public ResponseEntity<MenuUpdateResponseDto> updateMenu(@PathVariable Long shopId,@PathVariable Long menuId, @RequestBody @Valid MenuUpdateRequestDto requestDto){
 
+		// TODO test를 위해 userId 하드코딩으로 나중에 수정 필요
+		Long userId = 1L;
+		MenuUpdateResponseDto menuUpdateResponseDto = menuService.updateMenu(userId,shopId,menuId,requestDto);
+
+		return new ResponseEntity<>(menuUpdateResponseDto,HttpStatus.OK);
+	}
 }
