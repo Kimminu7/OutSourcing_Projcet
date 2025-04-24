@@ -20,4 +20,7 @@ public interface ShopService {
     ShopResponseDto patchShop(Long shopId, ShopPatchRequestDto shopPatchRequestDto);
 
     void deleteShop(Long shopId);
+
+    void setStarInShop();
+
 }

@@ -49,34 +49,22 @@ public class ShopServiceImpl implements ShopService {
     }
     @Transactional(readOnly = true)
     @Override
+//    @Cacheable(value = "shopOpenStatus", key = "#shopId", unless = "#result == null", cacheManager = "shopOpenStatusCacheManager")
+//    추후 cash 작업 가능 한다면...
     public List<ShopResponseDto> findAllShop(Category category) {
-        // 1. 조건에 따라 shop 목록 조회
         List<Shop> shops = (category == null)
                 ? shopRepository.findAll()
                 : shopRepository.findShopByCategory(category);
 
-        // 2. ShopId 리스트 뽑기
-        List<Long> shopIds = shops.stream()
-                .map(Shop::getShopId)
-                .toList();
-
-        // 3. 캐시된 isShopOpen 결과를 일괄 조회
-        Map<Long, Boolean> openStatusMap = getShopOpenStatusBatch(shopIds);
-
-        // 4. DTO 생성 시 캐시 맵에서 꺼내서 사용
         return shops.stream()
-                .map(shop -> new ShopResponseDto(
-                        shop.getAddress(),
-                        shop.getAddress(),
-                        openStatusMap.getOrDefault(shop.getShopId(), false),
-                        shop.getStars(),
-                        shop.getMinDeliveryPrice()
-                ))
+                .map(shop -> getShopResponseDto(shop.getShopId()))  // 캐시된 DTO를 사용
                 .toList();
     }
 
+
     @Transactional(readOnly = true)
     @Override
+
     public ShopWithMenuResponse findShopWithMenu(Long shopId) {
         //query문 where + feat join first(쿼리) 작성만 하시면 끝
         List<Menu> menus=  menuRepository.findMenuWithShop(shopId);
@@ -85,7 +73,7 @@ public class ShopServiceImpl implements ShopService {
                 shop.getStoreName()
                 ,shop.getAddress()
                 ,isShopOpen(shopId)
-                ,shop.getStars()
+                , shop.getStars()
                 ,shop.getMinDeliveryPrice());
         for (Menu menu: menus){
             ShopWithMenuResponse.MenuItem(menu.getMenuName,menu.getPrice);
@@ -112,17 +100,18 @@ public class ShopServiceImpl implements ShopService {
     public void deleteShop(Long shopId) {
         shopRepository.deleteById(shopId);
     }
+    @Transactional
+    @Override
+    @Scheduled(cron = "0 0 * * * *") // 매시간 정각
+    public void setStarInShop(){
+        List<Shop> shops = shopRepository.findAll();
+        for (Shop shop : shops) {
+            double newStar = menuRepository.calculateAverageStar(shop.getId());
+            shop.setStars(newStar);
+        }
 
-
-    public Map<Long, Boolean> getShopOpenStatusBatch(List<Long> shopIds) {
-        return shopIds.stream()
-                .collect(Collectors.toMap(
-                        id -> id,
-                        this::isShopOpen
-                ));
     }
 
-    @Cacheable(value = "shopOpenStatus", key = "#shopId", unless = "#result == null", cacheManager = "shortTTLCacheManager")
     public boolean isShopOpen(Long shopId) {
         Shop shop = shopRepository.findByIdThrowException(shopId);
         LocalTime now = LocalTime.now();
@@ -132,5 +121,7 @@ public class ShopServiceImpl implements ShopService {
                 now.isAfter(shop.getStartTime()) &&
                 now.isBefore(shop.getEndTime());
     }
+
+
 
 }
