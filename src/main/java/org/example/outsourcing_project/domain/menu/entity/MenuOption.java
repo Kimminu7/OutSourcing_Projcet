@@ -2,6 +2,7 @@ package org.example.outsourcing_project.domain.menu.entity;
 
 import org.example.outsourcing_project.common.baseEntity.BaseEntity;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuOptionRequestDto;
+import org.example.outsourcing_project.domain.menu.dto.request.MenuOptionUpdateRequestDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,5 +46,10 @@ public class MenuOption extends BaseEntity {
 
 	public void softDelete(){
 		this.status = false;
+	}
+
+	public void update(MenuOptionUpdateRequestDto dto) {
+		this.options = dto.getOptions();
+		this.price = dto.getPrice();
 	}
 }
