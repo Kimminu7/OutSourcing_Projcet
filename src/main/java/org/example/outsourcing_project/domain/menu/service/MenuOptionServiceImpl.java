@@ -51,4 +51,20 @@ public class MenuOptionServiceImpl implements MenuOptionService {
 
 		return new MenuOptionUpdateResponseDto(menuOption);
 	}
+
+	@Override
+	@Transactional
+	public void deleteOption(Long shopId, Long menuId, Long optionId) {
+
+		Menu menu = menuRepository.findByIdAndShop_ShopId(menuId,shopId)
+			.orElseThrow(()-> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
+
+		MenuOption menuOption = menuOptionRepository.findById(optionId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 옵션입니다."));
+
+		if (!menuOption.getMenu().getId().equals(menu.getId())) {
+			throw new IllegalArgumentException("이 메뉴에 없는 옵션입니다.");
+		}
+		menuOption.softDelete();
+	}
 }

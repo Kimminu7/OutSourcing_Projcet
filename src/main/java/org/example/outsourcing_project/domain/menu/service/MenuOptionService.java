@@ -12,4 +12,5 @@ public interface MenuOptionService {
 
 	MenuOptionUpdateResponseDto updateOption(Long shopId, Long menuId, Long optionId, MenuOptionUpdateRequestDto dto);
 
+	void deleteOption(Long shopId, Long menuId, Long optionId);
 }
