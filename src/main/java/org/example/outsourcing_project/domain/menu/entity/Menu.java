@@ -61,5 +61,9 @@ public class Menu extends BaseEntity {
 		this.category = requestDto.getCategory();
 	}
 
+	public void softDelete(){
+		this.status = false;
+	}
+
 }
 

@@ -52,4 +52,17 @@ public class MenuServiceImpl implements MenuService{
 
 		return new MenuUpdateResponseDto(menu);
 	}
+
+	@Override
+	@Transactional
+	public void deleteMenu(Long userid, Long shopid, Long menuid) {
+		Shop shop = shopRepository.findById(shopid)
+			.orElseThrow(()-> new IllegalArgumentException("존재하지 않는 매장입니다."));
+
+		Menu menu = menuRepository.findByIdAndShop_ShopId(menuid, shopid)
+			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
+
+		menu.softDelete();
+
+	}
 }
