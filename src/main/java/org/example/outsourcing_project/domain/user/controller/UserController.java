@@ -49,4 +49,11 @@ public class UserController {
     }
 
     // 회원 탈퇴
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> delete(@PathVariable Long userId) {
+
+        userService.delete(userId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -84,4 +84,13 @@ public class UserServiceImpl implements UserService{
                 findUser.getUpdatedAt()
         );
     }
+
+    // 회원 탈퇴
+    @Override
+    public void delete(Long userId) {
+
+        User findUser = userRepository.findByIdOrElseThrow(userId);
+
+        userRepository.delete(findUser);
+    }
 }
