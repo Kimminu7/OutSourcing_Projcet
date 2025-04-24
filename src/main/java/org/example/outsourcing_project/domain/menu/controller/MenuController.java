@@ -19,7 +19,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/shops/{shopid}")
+@RequestMapping("/shops/{shopId}")
 @RequiredArgsConstructor
 public class MenuController {
 
@@ -27,37 +27,37 @@ public class MenuController {
 
 	@PostMapping("/menus")
 	public ResponseEntity<MenuCreateResponseDto> createMenu(
-		@PathVariable Long shopid,
+		@PathVariable Long shopId,
 		@RequestBody @Valid MenuCreateRequestDto requestDto) {
 
 		// TODO test를 위해 userId 하드코딩으로 나중에 수정 필요
-		Long userid = 1L;
-		MenuCreateResponseDto menuCreateResponseDto = menuService.createMenu(userid, shopid, requestDto);
+		Long userId = 1L;
+		MenuCreateResponseDto menuCreateResponseDto = menuService.createMenu(userId, shopId, requestDto);
 
 		return new ResponseEntity<>(menuCreateResponseDto, HttpStatus.OK);
 	}
 
-	@PatchMapping("/menus/{menuid}")
+	@PatchMapping("/menus/{menuId}")
 	public ResponseEntity<MenuUpdateResponseDto> updateMenu(
-		@PathVariable Long shopid,
-		@PathVariable Long menuid,
+		@PathVariable Long shopId,
+		@PathVariable Long menuId,
 		@RequestBody @Valid MenuUpdateRequestDto requestDto) {
 
 		// TODO test를 위해 userId 하드코딩으로 나중에 수정 필요
-		Long userid = 1L;
-		MenuUpdateResponseDto menuUpdateResponseDto = menuService.updateMenu(userid, shopid, menuid, requestDto);
+		Long userId = 1L;
+		MenuUpdateResponseDto menuUpdateResponseDto = menuService.updateMenu(userId, shopId, menuId, requestDto);
 
 		return new ResponseEntity<>(menuUpdateResponseDto, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/menus/{menuid}")
+	@DeleteMapping("/menus/{menuId}")
 	public ResponseEntity<Void> deletMenu(
-		@PathVariable Long shopid,
-		@PathVariable Long menuid) {
+		@PathVariable Long shopId,
+		@PathVariable Long menuId) {
 
 		// TODO test를 위해 userId 하드코딩으로 나중에 수정 필요
-		Long userid = 1L;
-		menuService.deleteMenu(userid,shopid,menuid);
+		Long userId = 1L;
+		menuService.deleteMenu(userId, shopId, menuId);
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
