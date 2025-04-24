@@ -3,7 +3,7 @@ package org.example.outsourcing_project.domain.user.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.outsourcing_project.domain.user.entity.User;
-import org.example.outsourcing_project.domain.user.entity.UserRole;
+import org.example.outsourcing_project.domain.user.UserRole;
 
 import java.time.LocalDateTime;
 

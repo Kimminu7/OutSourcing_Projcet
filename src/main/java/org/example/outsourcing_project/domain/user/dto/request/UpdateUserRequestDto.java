@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.outsourcing_project.domain.user.entity.UserRole;
+import org.example.outsourcing_project.domain.user.UserRole;
 
 @Getter
 @NoArgsConstructor

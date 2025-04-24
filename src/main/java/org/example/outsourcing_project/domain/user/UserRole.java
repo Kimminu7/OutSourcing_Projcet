@@ -1,4 +1,4 @@
-package org.example.outsourcing_project.domain.user.entity;
+package org.example.outsourcing_project.domain.user;
 
 public enum UserRole {
     OWNER, // 사장
