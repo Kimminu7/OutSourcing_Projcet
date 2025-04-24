@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.outsourcing_project.common.exception.ErrorCode;
 import org.example.outsourcing_project.common.exception.custom.BaseException;
 import org.example.outsourcing_project.domain.order.entity.Order;
+import org.example.outsourcing_project.domain.order.entity.OrderStatus;
 import org.example.outsourcing_project.domain.order.repository.OrderRepository;
 import org.example.outsourcing_project.domain.review.dto.request.ReviewRequestDto;
 import org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto;
@@ -34,7 +35,7 @@ public class ReviewService {
         User user = userRepository.findById(order.getUserId()).orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER_ID));
 
         //현재 로그인된 유저와 주문의 유저가 같다면 리뷰 저장
-        if(currentUserId.equals(user.getUserId())){
+        if(currentUserId.equals(user.getUserId()) && order.getStatus() == OrderStatus.DELIVERED){
             Review review = new Review(order, requestDto.getContents(), requestDto.getStars());
             Review savedReview = reviewRepository.save(review);
 

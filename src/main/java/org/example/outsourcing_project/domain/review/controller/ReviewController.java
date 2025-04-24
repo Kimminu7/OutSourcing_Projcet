@@ -25,7 +25,6 @@ public class ReviewController {
             @PathVariable Long orderId,
             @Valid @RequestBody ReviewRequestDto requestDto
     ){
-
         ReviewResponseDto reviewResponseDto = reviewService.createReview(userId, orderId, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewResponseDto);
     }
