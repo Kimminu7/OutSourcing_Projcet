@@ -12,4 +12,6 @@ public interface UserService {
     List<UserResponseDto> findAll();
 
     UserResponseDto update(Long userId, String oldPassword, String newPassword, String address, UserRole role);
+
+    void delete(Long userId);
 }
