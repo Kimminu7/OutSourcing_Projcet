@@ -2,6 +2,7 @@ package org.example.outsourcing_project.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.outsourcing_project.domain.user.dto.request.DeleteUserRequestDto;
 import org.example.outsourcing_project.domain.user.dto.request.SignupUserRequestDto;
 import org.example.outsourcing_project.domain.user.dto.request.UpdateUserRequestDto;
 import org.example.outsourcing_project.domain.user.dto.response.UserResponseDto;
@@ -50,9 +51,12 @@ public class UserController {
 
     // 회원 탈퇴
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> delete(@PathVariable Long userId) {
+    public ResponseEntity<Void> delete(
+            @PathVariable Long userId,
+            @RequestBody DeleteUserRequestDto requestDto
+    ) {
 
-        userService.delete(userId);
+        userService.delete(userId, requestDto.getPassword());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
