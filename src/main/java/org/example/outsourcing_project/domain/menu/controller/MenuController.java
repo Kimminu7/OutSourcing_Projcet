@@ -3,11 +3,13 @@ package org.example.outsourcing_project.domain.menu.controller;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuCreateResponseDto;
+import org.example.outsourcing_project.domain.menu.dto.response.MenuResponseDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuUpdateResponseDto;
 import org.example.outsourcing_project.domain.menu.service.MenuService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +37,18 @@ public class MenuController {
 		MenuCreateResponseDto menuCreateResponseDto = menuService.createMenu(userId, shopId, requestDto);
 
 		return new ResponseEntity<>(menuCreateResponseDto, HttpStatus.OK);
+	}
+
+	@GetMapping("/menus/{menuId}")
+	public ResponseEntity<MenuResponseDto> menuInfo(
+		@PathVariable Long shopId,
+		@PathVariable Long menuId
+	){
+		// TODO test를 위해 userId 하드코딩으로 나중에 수정 필요
+		Long userId = 1L;
+		MenuResponseDto menuResponseDto = menuService.getMenuByShop(userId, shopId, menuId);
+
+		return new ResponseEntity<>(menuResponseDto,HttpStatus.OK);
 	}
 
 	@PatchMapping("/menus/{menuId}")

@@ -3,6 +3,7 @@ package org.example.outsourcing_project.domain.menu.service;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuCreateResponseDto;
+import org.example.outsourcing_project.domain.menu.dto.response.MenuResponseDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuUpdateResponseDto;
 import org.example.outsourcing_project.domain.menu.entity.Menu;
 import org.example.outsourcing_project.domain.menu.repository.MenuRepository;
@@ -55,11 +56,11 @@ public class MenuServiceImpl implements MenuService{
 
 	@Override
 	@Transactional
-	public void deleteMenu(Long userid, Long shopid, Long menuid) {
-		Shop shop = shopRepository.findById(shopid)
+	public void deleteMenu(Long userid, Long shopId, Long menuId) {
+		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(()-> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
-		Menu menu = menuRepository.findByIdAndShop_ShopId(menuid, shopid)
+		Menu menu = menuRepository.findByIdAndShop_ShopId(menuId, shopId)
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		if (!menu.getStatus()){
@@ -68,5 +69,17 @@ public class MenuServiceImpl implements MenuService{
 
 		menu.softDelete();
 
+	}
+
+	@Override
+	public MenuResponseDto getMenuByShop(Long userId, Long shopId, Long menuId) {
+
+		Shop shop = shopRepository.findById(shopId)
+			.orElseThrow(()-> new IllegalArgumentException("존재하지 않는 매장입니다."));
+
+		Menu menu = menuRepository.findByIdAndShop_ShopId(menuId, shopId)
+			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
+
+		return new MenuResponseDto(menu);
 	}
 }

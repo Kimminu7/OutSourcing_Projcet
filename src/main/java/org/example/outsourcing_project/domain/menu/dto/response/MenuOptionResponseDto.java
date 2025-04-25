@@ -9,7 +9,7 @@ public class MenuOptionResponseDto {
 
 	private Long shopId;
 	private Long menuId;
-	private Long OptionId;
+	private Long optionId;
 	private String options;
 	private int price;
 	private Boolean status;
@@ -17,7 +17,7 @@ public class MenuOptionResponseDto {
 	public MenuOptionResponseDto(MenuOption menuOption) {
 		this.menuId = menuOption.getMenu().getId();
 		this.shopId = menuOption.getMenu().getShop().getShopId();
-		this.OptionId = menuOption.getId();
+		this.optionId = menuOption.getId();
 		this.options = menuOption.getOptions();
 		this.price = menuOption.getPrice();
 		this.status = menuOption.isStatus();
