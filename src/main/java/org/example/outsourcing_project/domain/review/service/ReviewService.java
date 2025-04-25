@@ -6,6 +6,7 @@ import org.example.outsourcing_project.common.exception.custom.BaseException;
 import org.example.outsourcing_project.domain.order.entity.Order;
 import org.example.outsourcing_project.domain.order.entity.OrderStatus;
 import org.example.outsourcing_project.domain.order.repository.OrderRepository;
+import org.example.outsourcing_project.domain.menu.repository.MenuRepository;
 import org.example.outsourcing_project.domain.review.dto.request.ReviewRequestDto;
 import org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto;
 import org.example.outsourcing_project.domain.review.entity.Review;
