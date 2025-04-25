@@ -11,7 +11,7 @@ import org.example.outsourcing_project.domain.order.entity.Order;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "reviews")
+@Table(name = "review")
 public class Review extends BaseTimeEntity {
 
     @Id
