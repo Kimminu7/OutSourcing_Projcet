@@ -38,6 +38,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private UserRole role;
 
+    @Column(nullable = false)
     private boolean isDeleted = false;
 
     public User(String email, String password, String name, String address, UserRole role) {

@@ -9,11 +9,14 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
+/**
+ *  JWT(Token)을 생성하고 검증하는 역할인 클래스
+ */
 @Component
 public class JwtProvider {
 
     private Key key;
-    private final long EXPIRATION_TIME = 1000 * 60 * 60; // 1시간
+    private final long EXPIRATION_TIME = 1000 * 60 * 60; // 토큰 유효시간 : 1시간
 
     @PostConstruct
     public void init() {
