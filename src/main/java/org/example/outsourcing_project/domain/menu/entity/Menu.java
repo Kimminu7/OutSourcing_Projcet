@@ -3,8 +3,8 @@ package org.example.outsourcing_project.domain.menu.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.example.outsourcing_project.common.baseEntity.BaseEntity;
-import org.example.outsourcing_project.common.category.Category;
+import org.example.outsourcing_project.common.entity.BaseEntity;
+import org.example.outsourcing_project.common.enums.Category;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
 import org.example.outsourcing_project.domain.shop.entity.Shop;

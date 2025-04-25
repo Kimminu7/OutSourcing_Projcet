@@ -1,6 +1,7 @@
 package org.example.outsourcing_project.domain.menu.dto.request;
 
-import org.example.outsourcing_project.common.category.Category;
+import org.checkerframework.checker.units.qual.C;
+import org.example.outsourcing_project.common.enums.Category;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -19,7 +20,6 @@ public class MenuCreateRequestDto {
 	@Min(value = 0, message = "가격은 0원 이상이어야 합니다.")
 	private Integer price;
 
-	@NotNull (message = "카테고리는 비워둘 수 없습니다.")
 	private Category category;
 
 
