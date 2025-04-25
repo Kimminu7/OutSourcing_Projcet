@@ -106,40 +106,10 @@ public class Shop extends BaseEntity {
         setUpdatedAt(LocalDateTime.now());
     }
 
-    public ShopStatus getCurrentShopStatus() {
-        // 영구 폐점이면 바로 리턴
-        if (shopStatus == ShopStatus.CLOSED_PERMANENTLY) {
-            return ShopStatus.CLOSED_PERMANENTLY;
-        }
-
-        // 운영 시간 또는 닫는 요일이 null일 경우 CLOSED 처리
-        if (operatingHours == null || operatingHours.getOpenTime() == null || operatingHours.getCloseTime() == null) {
-            return ShopStatus.CLOSED;
-        }
-
-        List<ShopDayOfWeek> days = getClosedDays(); // null-safe getter 사용
-        LocalTime now = LocalTime.now();
-        ShopDayOfWeek today = ShopDayOfWeek.of(LocalDate.now().getDayOfWeek().name());
-
-        // 오늘이 휴무일이면 CLOSED
-        if (days.contains(today)) {
-            return ShopStatus.CLOSED;
-        }
-
-        // 시간 내에 있는 경우만 OPEN
-        if (now.isAfter(operatingHours.getOpenTime()) && now.isBefore(operatingHours.getCloseTime())) {
-            return ShopStatus.OPEN;
-        }
-
-        return ShopStatus.CLOSED;
-    }
     public void updateShopStatus(ShopStatus status) {
         this.shopStatus = status;
     }
-    public boolean needsStatusUpdate() {
-        ShopStatus calculatedStatus = getCurrentShopStatus();
-        return !this.shopStatus.equals(calculatedStatus);
-    }
+
 
 
 }

@@ -12,6 +12,7 @@ import org.example.outsourcing_project.domain.shop.dto.request.ShopRequestDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopResponseDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopWithMenuResponse;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
+import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
 import org.example.outsourcing_project.domain.shop.repository.ShopRepository;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.example.outsourcing_project.domain.user.repository.UserRepository;
@@ -23,7 +24,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ShopServiceImpl implements ShopService {
     private final ShopRepository shopRepository;
     private final UserRepository userRepository;
@@ -41,7 +41,7 @@ public class ShopServiceImpl implements ShopService {
             throw new RuntimeException("부자 사장님");
         }
         Shop shop=requestDto.toEntity(user);
-        log.info("closedDays from request: {}", requestDto.getClosedDays());
+
         Shop saveshop=shopRepository.save(shop);
 
         return ShopResponseDto.from(saveshop);
@@ -84,6 +84,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public void deleteShop(Long shopId) {
-        shopRepository.deleteById(shopId);
+        Shop shop=shopRepository.findByIdThrowException(shopId);
+        shop.updateShopStatus(ShopStatus.CLOSED_PERMANENTLY);
     }
 }

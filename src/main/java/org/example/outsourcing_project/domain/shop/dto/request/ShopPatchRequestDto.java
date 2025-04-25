@@ -10,7 +10,6 @@ import java.time.LocalTime;
 @Getter
 public class ShopPatchRequestDto {
 
-    @NotBlank(message = "가게번호는 필수입니다")
     @Pattern(
             regexp = "^(01[016789]|0\\d{1,2})-\\d{3,4}-\\d{4}$",
             message = "올바른 전화번호 형식이어야 합니다. 예: 010-1234-5678"
@@ -20,7 +19,7 @@ public class ShopPatchRequestDto {
     @PositiveOrZero(message = "0원 이상이어야 합니다.")
     private Long minDeliveryPrice;
 
-    private LocalTime startTime;
+    private LocalTime openTime;
 
-    private LocalTime endTime;
+    private LocalTime closeTime;
 }

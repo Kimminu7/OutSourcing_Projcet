@@ -19,6 +19,9 @@ public enum Category {
 
     @JsonCreator
     public static Category from(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException("입력값이 null이거나 공백입니다.");
+        }
         return Arrays.stream(values())
                 .filter(c -> c.name().equalsIgnoreCase(input) || c.label.equalsIgnoreCase(input))
                 .findFirst()

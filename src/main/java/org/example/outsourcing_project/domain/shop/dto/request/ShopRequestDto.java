@@ -55,7 +55,7 @@ public class ShopRequestDto {
                 .minDeliveryPrice(minDeliveryPrice)
                 .category(category)
                 .closedDays(closedDays)
-                .shopStatus(ShopStatus.CLOSED)
+                .shopStatus(ShopStatus.PENDING)
                 .user(user)
                 .build();
     }

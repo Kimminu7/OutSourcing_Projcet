@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalTime;
@@ -40,6 +41,7 @@ class ShopServiceImplTest {
     private OrderRepository orderRepository;
     @Mock
     private MenuRepository menuRepository;
+    
 
     @InjectMocks
     private ShopServiceImpl shopService;
