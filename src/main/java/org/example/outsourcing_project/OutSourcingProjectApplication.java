@@ -13,5 +13,4 @@ public class OutSourcingProjectApplication {
     public static void main(String[] args) {
         SpringApplication.run(OutSourcingProjectApplication.class, args);
     }
-
 }
