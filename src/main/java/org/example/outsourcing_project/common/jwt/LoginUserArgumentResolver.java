@@ -1,5 +1,6 @@
 package org.example.outsourcing_project.common.jwt;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -21,14 +22,11 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
-        String header = webRequest.getHeader("Authorization");
+        Object userId = request.getAttribute("userId");
 
-        if (header == null || !header.startsWith("Bearer ")) {
-            throw new RuntimeException("JWT 토큰이 필요합니다.");
-        }
-        String token = header.substring(7);
-
-        return jwtProvider.getUserIdFromToken(token);
+        // 예외처리 null, Long인지 아닌지 필요
+        return userId;
     }
 }
