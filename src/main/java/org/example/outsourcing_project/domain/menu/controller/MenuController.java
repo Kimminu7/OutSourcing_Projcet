@@ -1,9 +1,12 @@
 package org.example.outsourcing_project.domain.menu.controller;
 
+import java.util.List;
+
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuCreateResponseDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuResponseDto;
+import org.example.outsourcing_project.domain.menu.dto.response.MenuSearchResponseDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuUpdateResponseDto;
 import org.example.outsourcing_project.domain.menu.service.MenuService;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -75,5 +79,15 @@ public class MenuController {
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+
+	@GetMapping("/menus/search")
+	public ResponseEntity<List<MenuSearchResponseDto>> searchMenu(
+		@PathVariable Long shopId,
+		@RequestParam String keyword
+	){
+		List<MenuSearchResponseDto> searchResult = menuService.searchMenuByKeyword(shopId,keyword);
+		return new ResponseEntity<>(searchResult,HttpStatus.OK);
+	}
+
 }
 

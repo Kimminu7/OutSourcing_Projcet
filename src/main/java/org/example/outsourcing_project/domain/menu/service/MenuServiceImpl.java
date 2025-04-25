@@ -1,9 +1,13 @@
 package org.example.outsourcing_project.domain.menu.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuCreateResponseDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuResponseDto;
+import org.example.outsourcing_project.domain.menu.dto.response.MenuSearchResponseDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuUpdateResponseDto;
 import org.example.outsourcing_project.domain.menu.entity.Menu;
 import org.example.outsourcing_project.domain.menu.repository.MenuRepository;
@@ -81,5 +85,19 @@ public class MenuServiceImpl implements MenuService{
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		return new MenuResponseDto(menu);
+	}
+
+	@Override
+	public List<MenuSearchResponseDto> searchMenuByKeyword(Long shopId, String keyword) {
+
+		List<Menu> searchMenu = menuRepository.findByShop_ShopIdAndNameContaining(shopId,keyword);
+
+		List<MenuSearchResponseDto>	responseList = new ArrayList<>();
+		for (Menu menu : searchMenu){
+			if(menu.getStatus()){
+				responseList.add(new MenuSearchResponseDto(menu));
+			}
+		}
+		return responseList;
 	}
 }
