@@ -19,6 +19,7 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
+    //리뷰 생성
     @PostMapping("/{orderId}")
     public ResponseEntity<ReviewResponseDto> createReview (
             @RequestParam Long userId, //임시 유저ID

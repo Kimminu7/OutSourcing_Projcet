@@ -25,6 +25,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final MenuRepository menuRepository;
 
     //리뷰 작성
     @Transactional
@@ -98,7 +99,7 @@ public class ReviewService {
                 .userName(user.getName())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
-                .menuName(order.getMenu().getMenuName())
+                .menuName(menuRepository.findById(order.getMenuId()).getMenuName())
                 .build();
     }
 }
