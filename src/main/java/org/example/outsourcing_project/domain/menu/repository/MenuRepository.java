@@ -11,9 +11,5 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
 	@EntityGraph(attributePaths = "menuOptions")
 	Optional<Menu> findByIdAndShop_ShopId(Long id, Long shopid);
 
-	// List<Menu> findByIdAndShop_ShopIdAndNameContaining(Long id, Long shopShopId, String name);
-	//
-	// List<Menu> findByShopIdAndNameContaining(String name);
-
 	List<Menu> findByShop_ShopIdAndNameContaining(Long shopId, String keyword);
 }
