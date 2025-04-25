@@ -34,7 +34,7 @@ public class ShopWithMenuResponse {
         return ShopWithMenuResponse.builder()
                 .storeName(shop.getShopName())
                 .address(shop.getAddress())
-                .shopStatus(shop.getShopStatus())
+                .shopStatus(shop.getCurrentShopStatus())
                 .star(shop.getStars())
                 .minDeliverPrice(shop.getMinDeliveryPrice())
                 .menus(menuItems)

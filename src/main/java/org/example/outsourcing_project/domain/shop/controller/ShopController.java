@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("shops/")
+@RequestMapping("shops")
 @RestController
 @RequiredArgsConstructor
 public class ShopController {

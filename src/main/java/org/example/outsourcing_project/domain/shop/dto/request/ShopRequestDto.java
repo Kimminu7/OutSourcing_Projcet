@@ -27,8 +27,9 @@ public class ShopRequestDto {
     private String shopName;
     @NotBlank(message = "가게주소는 빈칸이면 안됩니다.")
     private String address;
+    @NotBlank(message = "가게번호는 필수입니다")
     @Pattern(
-            regexp = "0(?:0|3)(?:0|1|[6-9])-\\d{3,4}-\\d{4}$",
+            regexp = "^(01[016789]|0\\d{1,2})-\\d{3,4}-\\d{4}$",
             message = "올바른 전화번호 형식이어야 합니다. 예: 010-1234-5678"
     )
     private String shopNumber;

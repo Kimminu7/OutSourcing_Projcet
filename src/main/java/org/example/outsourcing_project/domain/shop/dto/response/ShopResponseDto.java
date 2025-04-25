@@ -20,9 +20,10 @@ public class ShopResponseDto {
         return ShopResponseDto.builder()
                 .storeName(shop.getShopName())
                 .address(shop.getAddress())
-                .shopStatus(shop.getCurrentShopStatus())
+                .shopStatus(shop.getShopStatus())
                 .star(shop.getStars())
                 .minDeliverPrice(shop.getMinDeliveryPrice())
                 .build();
     }
 }
+
