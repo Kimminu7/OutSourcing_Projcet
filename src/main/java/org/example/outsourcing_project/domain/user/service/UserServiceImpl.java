@@ -19,41 +19,6 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // 회원 가입
-    @Transactional
-    @Override
-    public UserResponseDto Signup(String email, String password, String name, String address, UserRole role) {
-
-        // 기존 유저 존재 여부 확인
-        Optional<User> findUserEmail = userRepository.findByEmail(email);
-
-        if(findUserEmail.isPresent()) {
-            User existUser = findUserEmail.get(); // Optional get() 사용하면 객체에 접근가능함.
-            // 이미 탈퇴한 사용자 이면 재가입 불가능
-            if(existUser.isDeleted()) {
-                throw new RuntimeException("이미 탈퇴한 회원입니다. 재가입이 불가능합니다.");
-            }
-            throw new RuntimeException("이미 가입된 회원입니다.");
-        }
-
-        // 비밀번호 암호화
-        String encodePassword = passwordEncoder.encode(password);
-
-        User addUser = new User(email, encodePassword, name, address, role);
-
-        User savedUser = userRepository.save(addUser);
-
-        return new UserResponseDto(
-                savedUser.getUserId(),
-                savedUser.getEmail(),
-                savedUser.getName(),
-                savedUser.getAddress(),
-                savedUser.getRole(),
-                savedUser.getCreatedAt(),
-                savedUser.getUpdatedAt()
-        );
-    }
-
     // 전체 유저 조회
     @Override
     public List<UserResponseDto> findAll() {
