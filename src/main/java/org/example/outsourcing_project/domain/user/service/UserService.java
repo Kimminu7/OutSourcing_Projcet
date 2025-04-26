@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface UserService {
 
-    UserResponseDto Signup(String email, String password, String name, String address, UserRole role);
-
     List<UserResponseDto> findAll();
 
     UserResponseDto update(Long userId, String oldPassword, String newPassword, String address, UserRole role);
