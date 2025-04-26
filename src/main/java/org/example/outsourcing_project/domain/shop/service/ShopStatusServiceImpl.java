@@ -15,8 +15,9 @@ public class ShopStatusServiceImpl implements ShopStatusService{
 
     @Override
     @Transactional
-    public void closeShop(Long shopId) {
-        Shop shop=shopRepository.findByIdThrowException(shopId);
+    public void closeShop(Long shopId,Long userId) {
+       Shop shop=validateShop(userId,shopId);
+
         if (shop.getShopStatus()==ShopStatus.CLOSED) {
             throw new RuntimeException("이미 폐점 했습니다");
         }
@@ -25,11 +26,22 @@ public class ShopStatusServiceImpl implements ShopStatusService{
 
     @Override
     @Transactional
-    public void openShop(Long shopId) {
-        Shop shop=shopRepository.findByIdThrowException(shopId);
+    public void openShop(Long shopId, Long userId) {
+
+        Shop shop=validateShop(userId,shopId);
+
         if (shop.getShopStatus()==ShopStatus.OPEN) {
             throw new RuntimeException("이미 오픈 했습니다");
         }
         shop.updateShopStatus(ShopStatus.OPEN,ShopStatusAuth.MANUAL);
+    }
+
+
+    private Shop validateShop(Long userId, Long shopId) {
+        Shop shop = shopRepository.findByIdThrowException(shopId);
+        if (!shop.getUser().getUserId().equals(userId)) {
+            throw new RuntimeException("가게 주인이 아닙니다.");
+        }
+        return shop;
     }
 }

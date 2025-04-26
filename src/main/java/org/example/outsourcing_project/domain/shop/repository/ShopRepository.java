@@ -7,8 +7,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ShopRepository extends JpaRepository<Shop,Long> {
+
+
+    @Query("SELECT s FROM Shop s LEFT JOIN FETCH s.user " +
+            "WHERE s.shopId = :shopId")
+    Optional<Shop> findByIdWithUser(@Param("shopId") Long shopId);
+
+    default Shop findByIdWithUserThrowException(Long shopId) {
+        return findByIdWithUser(shopId)
+                .orElseThrow(() -> new RuntimeException("해당 가게를 찾을 수 없습니다."));
+    }
 
 
     default Shop findByIdThrowException(Long shopId){
