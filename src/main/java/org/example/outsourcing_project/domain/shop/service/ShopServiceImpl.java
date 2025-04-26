@@ -1,24 +1,27 @@
 package org.example.outsourcing_project.domain.shop.service;
 
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.example.outsourcing_project.common.enums.Category;
-import org.example.outsourcing_project.common.exception.custom.NOT_FOUND_USER;
+import org.example.outsourcing_project.common.enums.ShopDayOfWeek;
 import org.example.outsourcing_project.domain.menu.entity.Menu;
-import org.example.outsourcing_project.domain.menu.repository.MenuRepository;
-import org.example.outsourcing_project.domain.order.repository.OrderRepository;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopPatchRequestDto;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopRequestDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopResponseDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopWithMenuResponse;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
 import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
+import org.example.outsourcing_project.domain.shop.enums.ShopStatusAuth;
 import org.example.outsourcing_project.domain.shop.repository.ShopRepository;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.example.outsourcing_project.domain.user.repository.UserRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,15 +30,13 @@ import java.util.stream.Collectors;
 public class ShopServiceImpl implements ShopService {
     private final ShopRepository shopRepository;
     private final UserRepository userRepository;
-    private final OrderRepository orderRepository;
-    private final MenuRepository menuRepository;
 
     @Override
     @Transactional
 
     public ShopResponseDto saveShop(Long userid, ShopRequestDto requestDto) {
         User user=userRepository.findById(userid).
-                orElseThrow(NOT_FOUND_USER::new);
+                orElseThrow();
 
         if (shopRepository.countShopByUserId(userid)>=3){
             throw new RuntimeException("부자 사장님");
@@ -85,6 +86,53 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public void deleteShop(Long shopId) {
         Shop shop=shopRepository.findByIdThrowException(shopId);
-        shop.updateShopStatus(ShopStatus.CLOSED_PERMANENTLY);
+        shop.updateShopStatus(ShopStatus.CLOSED_PERMANENTLY,ShopStatusAuth.MANUAL);
     }
+
+
+
+    @Override
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    public ShopStatus calculateCurrentStatus(Long shopId, LocalDateTime dateTime) {
+
+        Shop shop=shopRepository.findByIdThrowException(shopId);
+
+
+        // 고정 상태는 그대로 반환
+        if (shop.getShopStatus() == ShopStatus.CLOSED_PERMANENTLY || shop.getShopStatus() == ShopStatus.PENDING) {
+            return shop.getShopStatus();
+        }
+
+        List<ShopDayOfWeek> closedDays = shop.getClosedDays();
+        if (closedDays == null || closedDays.isEmpty()) return ShopStatus.PENDING;
+
+        LocalTime now = dateTime.toLocalTime();
+        LocalDate todayDate = dateTime.toLocalDate();
+
+        ShopDayOfWeek today = ShopDayOfWeek.of(todayDate.getDayOfWeek().name());
+        ShopDayOfWeek yesterday = ShopDayOfWeek.of(todayDate.minusDays(1).getDayOfWeek().name());
+
+        LocalTime openTime = shop.getOperatingHours().getOpenTime();
+        LocalTime closeTime = shop.getOperatingHours().getCloseTime();
+
+        boolean isTodayClosed = closedDays.contains(today);
+        boolean isYesterdayClosed = closedDays.contains(yesterday);
+
+        boolean isOpen = false;
+
+        if (openTime.isBefore(closeTime)) {
+            if (!isTodayClosed && now.isAfter(openTime) && now.isBefore(closeTime)) {
+                isOpen = true;
+            }
+        } else {
+            if ((now.isAfter(openTime) && !isTodayClosed) || (now.isBefore(closeTime) && !isYesterdayClosed)) {
+                isOpen = true;
+            }
+        }
+
+        return isOpen ? ShopStatus.OPEN : ShopStatus.CLOSED;// 구분이 분명해서 삼항 유지
+    }
+
+
+
 }

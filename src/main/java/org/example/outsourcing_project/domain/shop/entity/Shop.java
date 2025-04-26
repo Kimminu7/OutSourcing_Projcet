@@ -11,6 +11,7 @@ import org.example.outsourcing_project.common.enums.ShopDayOfWeek;
 import org.example.outsourcing_project.domain.menu.entity.Menu;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopPatchRequestDto;
 import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
+import org.example.outsourcing_project.domain.shop.enums.ShopStatusAuth;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -54,7 +55,12 @@ public class Shop extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private ShopStatus shopStatus = ShopStatus.CLOSED;
+    private ShopStatus shopStatus = ShopStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ShopStatusAuth shopStatusAuth =ShopStatusAuth.AUTO;
+
 
     @ElementCollection(targetClass = ShopDayOfWeek.class)
     @CollectionTable(name = "shop_closed_days", joinColumns = @JoinColumn(name = "shop_id"))
@@ -63,6 +69,13 @@ public class Shop extends BaseTimeEntity {
     @JsonDeserialize(contentUsing = DayOfWeekDeserializer.class)
     @Builder.Default
     private List<ShopDayOfWeek> closedDays = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        if (this.closedDays == null) {
+            this.closedDays = new ArrayList<>();
+        }
+    }
 
     @Enumerated(EnumType.STRING)
     private Category category;
@@ -75,6 +88,9 @@ public class Shop extends BaseTimeEntity {
     @Builder.Default
     private List<Menu> menus = new ArrayList<>();
 
+
+    //가장정보 업데이트
+    //DTO 의존성 추후개선
     public void update(ShopPatchRequestDto shopPatchRequestDto) {
         if (shopPatchRequestDto.getStoreNumber() != null) {
             this.shopNumber = shopPatchRequestDto.getStoreNumber();
@@ -86,30 +102,10 @@ public class Shop extends BaseTimeEntity {
         this.operatingHours.updateOpenTime(shopPatchRequestDto.getOpenTime());
     }
 
-    //자동
-    public ShopStatus calculateCurrentStatus(LocalTime now) {
-
-        ShopDayOfWeek today = ShopDayOfWeek.of(LocalDate.now().getDayOfWeek().name());
-
-        if (shopStatus.equals(ShopStatus.CLOSED_PERMANENTLY)) {
-            return ShopStatus.CLOSED_PERMANENTLY;
-        }
-        if (shopStatus.equals(ShopStatus.PENDING)) {
-            return ShopStatus.PENDING;
-        }
-
-        if (!getClosedDays().contains(today) &&
-                now.isAfter(getOperatingHours().getOpenTime()) &&
-                now.isBefore(getOperatingHours().getCloseTime())) {
-            return ShopStatus.OPEN;
-        }
-        return ShopStatus.CLOSED;
-    }
-
-    //수동
-    public void updateShopStatus(ShopStatus status) {
+    //가게 영업 상태
+    public void updateShopStatus(ShopStatus status,ShopStatusAuth auth) {
         this.shopStatus = status;
+        this.shopStatusAuth=auth;
     }
-
 
 }
