@@ -14,10 +14,6 @@ import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
 import org.example.outsourcing_project.domain.shop.enums.ShopStatusAuth;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +22,9 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
-@Table(name = "shops")
+@Table(name = "shop")
 @SQLDelete(sql = "UPDATE shops SET shop_status = 'CLOSED_PERMANENTLY' WHERE shop_id = ?")//소프트
-@SQLRestriction("shop_status != 'CLOSED_PERMANENTLY'")//where의 대안책
+
 public class Shop extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

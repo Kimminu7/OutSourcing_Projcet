@@ -2,9 +2,11 @@ package org.example.outsourcing_project.domain.shop.service;
 
 import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
+import org.example.outsourcing_project.common.config.PasswordEncoder;
 import org.example.outsourcing_project.common.enums.Category;
 import org.example.outsourcing_project.common.enums.ShopDayOfWeek;
 import org.example.outsourcing_project.domain.menu.entity.Menu;
+import org.example.outsourcing_project.domain.shop.dto.request.ShopDeleteRequestDto;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopPatchRequestDto;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopRequestDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopResponseDto;
@@ -30,19 +32,17 @@ import java.util.stream.Collectors;
 public class ShopServiceImpl implements ShopService {
     private final ShopRepository shopRepository;
     private final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder;
     @Override
     @Transactional
 
     public ShopResponseDto saveShop(Long userid, ShopRequestDto requestDto) {
-        User user=userRepository.findById(userid).
-                orElseThrow();
+        User user=userRepository.findByIdOrElseThrow(userid);
 
         if (shopRepository.countShopByUserId(userid)>=3){
             throw new RuntimeException("부자 사장님");
         }
         Shop shop=requestDto.toEntity(user);
-
         Shop saveshop=shopRepository.save(shop);
 
         return ShopResponseDto.from(saveshop);
@@ -66,7 +66,7 @@ public class ShopServiceImpl implements ShopService {
     @Transactional(readOnly = true)
     @Override
     public ShopWithMenuResponse findShopWithMenu(Long shopId) {
-        Shop shop=shopRepository.findByIdThrowException(shopId);
+        Shop shop=shopRepository.findByIdWithUserThrowException(shopId);
         List<Menu> menus=shop.getMenus();
         List<ShopWithMenuResponse.MenuItem> menuItems = menus.stream()
                 .map(menu -> new ShopWithMenuResponse.MenuItem(menu.getName(), menu.getPrice()))
@@ -77,16 +77,32 @@ public class ShopServiceImpl implements ShopService {
 
     @Transactional
     @Override
-    public ShopResponseDto patchShop(Long shopId, ShopPatchRequestDto shopPatchRequestDto) {
-        Shop shop=shopRepository.findByIdThrowException(shopId);
+    public ShopResponseDto patchShop(Long userId,Long shopId, ShopPatchRequestDto shopPatchRequestDto) {
+
+        Shop shop=shopRepository.findByIdWithUserThrowException(shopId);
+
+        if (!shop.getUser().getUserId().equals(userId)){
+            throw new RuntimeException("가게 사장이 아닙니다");
+        }
+
         shop.update(shopPatchRequestDto);
+
         return ShopResponseDto.from(shop);
     }
 
     @Override
-    public void deleteShop(Long shopId) {
-        Shop shop=shopRepository.findByIdThrowException(shopId);
-        shop.updateShopStatus(ShopStatus.CLOSED_PERMANENTLY,ShopStatusAuth.MANUAL);
+    public void deleteShop(Long shopId, Long userId, ShopDeleteRequestDto shopDeleteRequestDto) {
+        Shop shop = shopRepository.findByIdWithUserThrowException(shopId);
+
+        if (!shop.getUser().getUserId().equals(userId)) {
+            throw new RuntimeException("가게 사장이 아닙니다");
+        }
+        if (!passwordEncoder.matches(shopDeleteRequestDto.getPassword(), shop.getUser().getPassword())){
+
+            throw new RuntimeException("비밀번호가 일치하지 않습니다");
+        }
+
+        shopRepository.deleteById(shopId);
     }
 
 
@@ -95,8 +111,7 @@ public class ShopServiceImpl implements ShopService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public ShopStatus calculateCurrentStatus(Long shopId, LocalDateTime dateTime) {
 
-        Shop shop=shopRepository.findByIdThrowException(shopId);
-
+        Shop shop=shopRepository.findByIdWithUserThrowException(shopId);
 
         // 고정 상태는 그대로 반환
         if (shop.getShopStatus() == ShopStatus.CLOSED_PERMANENTLY || shop.getShopStatus() == ShopStatus.PENDING) {
