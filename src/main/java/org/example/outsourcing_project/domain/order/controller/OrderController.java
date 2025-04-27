@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.example.outsourcing_project.common.jwt.LoginUser;
 import org.example.outsourcing_project.domain.order.dto.response.OrderStatusLogResponse;
 import org.example.outsourcing_project.domain.order.entity.OrderStatus;
 import org.example.outsourcing_project.domain.order.dto.request.OrderCreateRequest;
@@ -31,8 +32,8 @@ public class OrderController {
 	 */
 	@PostMapping
 	public ResponseEntity<OrderResponse> createOrder(
-		@RequestBody @Valid OrderCreateRequest request,
-		@RequestParam Long userId  // 실제론 @AuthenticationPrincipal 등으로 받음
+			@RequestBody @Valid OrderCreateRequest request,
+			@LoginUser Long userId  // 실제론 @AuthenticationPrincipal 등으로 받음
 	) {
 		OrderResponse response = orderService.createOrder(userId, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
