@@ -24,7 +24,7 @@ public class ShopDeliveryResponseDto {
                 .shopName(order.getShop().getShopName())
                 .userName(order.getUser().getName())
                 .userAddress(order.getUser().getAddress())
-                .localDateTime(order.getOrderedAt())
+                .localDateTime(order.getCreatedAt())
                 .orderStatus(order.getStatus())
                 .build();
 

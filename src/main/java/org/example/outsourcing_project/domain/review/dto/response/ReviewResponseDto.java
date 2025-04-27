@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -13,5 +14,5 @@ public class ReviewResponseDto {
     private final String userName;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
-    private final String menuName;
+    private final List<String> menuNames;
 }
