@@ -29,7 +29,7 @@ public class MenuOptionServiceImpl implements MenuOptionService {
 	public MenuOptionResponseDto createOption(Long shopId,Long userId, Long menuId, MenuOptionRequestDto dto) {
 
 		User user = userRepository.findByIdOrElseThrow(userId);
-		Menu menu = menuRepository.findByIdAndId(menuId,shopId)
+		Menu menu = menuRepository.findByIdAndShopId(menuId,shopId)
 			.orElseThrow(()-> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		validateOwner(user,menu);
@@ -46,7 +46,7 @@ public class MenuOptionServiceImpl implements MenuOptionService {
 	@Transactional
 	public MenuOptionUpdateResponseDto updateOption(Long shopId, Long userId, Long menuId, Long optionId, MenuOptionUpdateRequestDto dto) {
 
-		Menu menu = menuRepository.findByIdAndId(menuId,shopId)
+		Menu menu = menuRepository.findByIdAndShopId(menuId,shopId)
 			.orElseThrow(()-> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		MenuOption menuOption = menuOptionRepository.findById(optionId)
@@ -65,7 +65,7 @@ public class MenuOptionServiceImpl implements MenuOptionService {
 	@Transactional
 	public void deleteOption(Long shopId, Long userId, Long menuId, Long optionId) {
 
-		Menu menu = menuRepository.findByIdAndId(menuId,shopId)
+		Menu menu = menuRepository.findByIdAndShopId(menuId,shopId)
 			.orElseThrow(()-> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		MenuOption menuOption = menuOptionRepository.findById(optionId)

@@ -56,7 +56,7 @@ public class MenuServiceImpl implements MenuService {
 
 		validateOwner(user, shop);
 
-		Menu menu = menuRepository.findByIdAndId(menuId, shopId)
+		Menu menu = menuRepository.findByIdAndShopId(menuId, shopId)
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		menu.update(requestDto);
@@ -75,7 +75,7 @@ public class MenuServiceImpl implements MenuService {
 
 		validateOwner(user, shop);
 
-		Menu menu = menuRepository.findByIdAndId(menuId, shopId)
+		Menu menu = menuRepository.findByIdAndShopId(menuId, shopId)
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		if (!menu.getStatus()) {
@@ -92,7 +92,7 @@ public class MenuServiceImpl implements MenuService {
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
-		Menu menu = menuRepository.findByIdAndId(menuId, shopId)
+		Menu menu = menuRepository.findByIdAndShopId(menuId, shopId)
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		return new MenuResponseDto(menu);

@@ -1,6 +1,8 @@
 package org.example.outsourcing_project.domain.order.dto.response;
 
 import lombok.Getter;
+
+import org.example.outsourcing_project.domain.menu.entity.Menu;
 import org.example.outsourcing_project.domain.order.entity.OrderMenu;
 
 /**
@@ -10,12 +12,12 @@ import org.example.outsourcing_project.domain.order.entity.OrderMenu;
 public class OrderMenuResponse {
 
     private Long menuId;
-    private Integer quantity;
-    private Integer price;
+    private String menuName;
+    private int price;
 
-    public OrderMenuResponse(OrderMenu orderMenu) {
-        this.menuId = orderMenu.getMenuId();
-        this.quantity = orderMenu.getQuantity();
-        this.price = orderMenu.getPrice();
+    public OrderMenuResponse(Menu menu) {
+        this.menuId = menu.getId();
+        this.menuName = menu.getName();
+        this.price = menu.getPrice();
     }
 }

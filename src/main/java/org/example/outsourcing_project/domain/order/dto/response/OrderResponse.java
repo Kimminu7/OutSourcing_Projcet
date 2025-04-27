@@ -19,7 +19,7 @@ public class OrderResponse {
 	private Long orderId;
 	private Long userId;
 	private Long storeId;
-	private List<OrderMenuResponse> orderMenus; // 변경된 부분
+	private OrderMenuResponse orderMenus; // 변경된 부분
 	private OrderStatus status;
 	private LocalDateTime orderedAt;
 
@@ -27,9 +27,7 @@ public class OrderResponse {
 		this.orderId = order.getId();
 		this.userId = order.getUser().getId();
 		this.storeId = order.getShop().getId();
-		this.orderMenus = order.getOrderMenus().stream()
-				.map(OrderMenuResponse::new)
-				.collect(Collectors.toList());
+		this.orderMenus = new OrderMenuResponse(order.getMenu());
 		this.status = order.getStatus();
 		this.orderedAt = order.getCreatedAt();
 	}

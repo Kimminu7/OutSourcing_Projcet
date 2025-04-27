@@ -102,19 +102,13 @@ public class ReviewService {
 
     private ReviewResponseDto buildReviewResponseDto(Review review, User user, Order order) {
 
-        List<String> menuNames = order.getOrderMenus().stream()
-                .map(orderMenu -> menuRepository.findById(orderMenu.getMenuId())
-                        .map(menu -> menu.getName())
-                        .orElse("Unknown Menu"))
-                .collect(Collectors.toList());
-
         return ReviewResponseDto.builder()
-                .contents(review.getContents())
-                .stars(review.getStars())
-                .userName(user.getName())
-                .createdAt(review.getCreatedAt())
-                .updatedAt(review.getUpdatedAt())
-                .menuNames(menuNames)
-                .build();
+            .contents(review.getContents())
+            .stars(review.getStars())
+            .userName(user.getName())
+            .createdAt(review.getCreatedAt())
+            .updatedAt(review.getUpdatedAt())
+            .menuName(order.getMenu().getName())
+            .build();
     }
 }

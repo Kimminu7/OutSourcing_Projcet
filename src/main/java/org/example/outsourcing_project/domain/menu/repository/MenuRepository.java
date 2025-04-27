@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MenuRepository extends JpaRepository<Menu, Long> {
-	Optional<Menu> findByIdAndId(Long id, Long shopid);
+	Optional<Menu> findByIdAndShopId(Long id, Long shopid);
 
 	List<Menu> findByIdAndNameContaining(Long shopId, String name);
 

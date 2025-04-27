@@ -52,7 +52,7 @@ public class MenuController {
 		@PathVariable Long menuId
 	){
 
-		MenuResponseDto menuResponseDto = menuService.getMenuByShop(userId, shopId, menuId);
+		MenuResponseDto menuResponseDto = menuService.getMenuByShop(userId,shopId,menuId);
 
 		return new ResponseEntity<>(menuResponseDto,HttpStatus.OK);
 	}

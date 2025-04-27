@@ -39,9 +39,9 @@ public class OrderService {
 		User user = userRepository.findByIdOrElseThrow(userId);
 
 		// 첫 번째 메뉴로 가게 조회
-		OrderMenuCreateRequest firstMenuRequest = request.getOrderMenus().get(0);
-		Menu firstMenu = menuRepository.findById(firstMenuRequest.getMenuId())
-				.orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴입니다."));
+		Long menuId = request.getOrderMenus().get(0).getMenuId();
+		Menu firstMenu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴입니다."));
 
 		Shop shop = shopRepository.findByIdThrowException(firstMenu.getShop().getId());
 
@@ -51,32 +51,10 @@ public class OrderService {
 		}
 
 		// 주문 생성
-		Order order = new Order(user, shop);
-
-		int totalPrice = 0;
-		for (OrderMenuCreateRequest orderMenuRequest : request.getOrderMenus()) {
-			Menu menu = menuRepository.findById(orderMenuRequest.getMenuId())
-					.orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴입니다."));
-
-			// 가게 일치 검증
-			if (!menu.getShop().getId().equals(shop.getId())) {
-				throw new IllegalArgumentException("같은 가게의 메뉴만 주문할 수 있습니다.");
-			}
-
-			int price = menu.getPrice() * orderMenuRequest.getQuantity();
-			totalPrice += price;
-
-			OrderMenu orderMenu = OrderMenu.builder()
-					.menuId(menu.getId())
-					.quantity(orderMenuRequest.getQuantity())
-					.price(price)
-					.build();
-
-			order.addOrderMenu(orderMenu);
-		}
+		Order order = new Order(user, shop, firstMenu);  // 메뉴를 추가
 
 		// 최소 배달 금액 확인
-		if (totalPrice < shop.getMinDeliveryPrice()) {
+		if (firstMenu.getPrice() < shop.getMinDeliveryPrice()) {
 			throw new IllegalArgumentException("최소 주문 금액을 만족하지 않습니다.");
 		}
 
@@ -87,7 +65,7 @@ public class OrderService {
 
 	public void updateOrderStatus(Long orderId, OrderStatusUpdateRequest request) {
 		Order order = orderRepository.findById(orderId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
 
 		OrderStatus newStatus = request.getStatus();
 
