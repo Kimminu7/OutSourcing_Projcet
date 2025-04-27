@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService{
         User savedUser = userRepository.save(addUser);
 
         return new UserResponseDto(
-                savedUser.getUserId(),
+                savedUser.getId(),
                 savedUser.getEmail(),
                 savedUser.getName(),
                 savedUser.getAddress(),
@@ -71,6 +71,6 @@ public class AuthServiceImpl implements AuthService{
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 
-        return jwtProvider.createToken(user.getUserId());
+        return jwtProvider.createToken(user.getId());
     }
 }

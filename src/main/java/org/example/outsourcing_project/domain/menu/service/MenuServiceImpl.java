@@ -49,7 +49,7 @@ public class MenuServiceImpl implements MenuService{
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
 
-		Menu menu = menuRepository.findByIdAndShop_ShopId(menuId,shopId)
+		Menu menu = menuRepository.findByIdAndShop_id(menuId,shopId)
 				.orElseThrow(()-> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 
@@ -64,7 +64,7 @@ public class MenuServiceImpl implements MenuService{
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(()-> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
-		Menu menu = menuRepository.findByIdAndShop_ShopId(menuId, shopId)
+		Menu menu = menuRepository.findByIdAndShop_id(menuId, shopId)
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		if (!menu.getStatus()){
@@ -81,7 +81,7 @@ public class MenuServiceImpl implements MenuService{
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(()-> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
-		Menu menu = menuRepository.findByIdAndShop_ShopId(menuId, shopId)
+		Menu menu = menuRepository.findByIdAndShop_id(menuId, shopId)
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		return new MenuResponseDto(menu);
@@ -90,7 +90,7 @@ public class MenuServiceImpl implements MenuService{
 	@Override
 	public List<MenuSearchResponseDto> searchMenuByKeyword(Long shopId, String keyword) {
 
-		List<Menu> searchMenu = menuRepository.findByShop_ShopIdAndNameContaining(shopId,keyword);
+		List<Menu> searchMenu = menuRepository.findByShop_idAndNameContaining(shopId,keyword);
 
 		List<MenuSearchResponseDto>	responseList = new ArrayList<>();
 		for (Menu menu : searchMenu){

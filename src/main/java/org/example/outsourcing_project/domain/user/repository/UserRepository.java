@@ -1,7 +1,7 @@
 package org.example.outsourcing_project.domain.user.repository;
 
-import jakarta.validation.constraints.Email;
 import org.example.outsourcing_project.domain.user.entity.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -23,4 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     default User findByEmailOrElseThrow(String email) {
         return findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."));
     }
+    @EntityGraph(attributePaths = "favorites")
+    Optional<User> findWithFavoritesById(Long userId);
+
 }

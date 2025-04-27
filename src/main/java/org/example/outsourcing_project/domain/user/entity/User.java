@@ -4,7 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.outsourcing_project.common.entity.BaseTimeEntity;
+import org.example.outsourcing_project.domain.favorite.entity.Favorites;
 import org.example.outsourcing_project.domain.user.UserRole;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -12,10 +16,10 @@ import org.example.outsourcing_project.domain.user.UserRole;
 @Table(name = "user")
 public class User extends BaseTimeEntity {
 
-    // PK
+    // PK -> 데이터 베이스 규칙에 Pk는 id가 어긋나서 수정했습니다 ^^7
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
     // 이메일
     @Column(nullable = false, unique = true)
@@ -40,6 +44,12 @@ public class User extends BaseTimeEntity {
 
     @Column(nullable = false)
     private boolean isDeleted = false;
+
+
+    //즐겨찾기 조회하기 위해서
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Favorites> favorites = new ArrayList<>();
+
 
     public User(String email, String password, String name, String address, UserRole role) {
         this.email = email;

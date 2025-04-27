@@ -3,7 +3,7 @@ package org.example.outsourcing_project.domain.menu.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.example.outsourcing_project.common.entity.BaseEntity;
+import org.example.outsourcing_project.common.entity.BaseTimeEntity;
 import org.example.outsourcing_project.common.enums.Category;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Menu extends BaseEntity {
+public class Menu extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

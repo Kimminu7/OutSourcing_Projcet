@@ -21,7 +21,7 @@ public class MenuResponseDto {
 
 	public MenuResponseDto(Menu menu) {
 
-		this.shopId = menu.getShop().getShopId();
+		this.shopId = menu.getShop().getId();
 		this.menuId = menu.getId();
 		this.name = menu.getName();
 		this.price = menu.getPrice();
