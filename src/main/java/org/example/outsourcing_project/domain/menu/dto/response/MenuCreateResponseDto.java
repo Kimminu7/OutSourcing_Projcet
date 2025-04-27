@@ -1,6 +1,6 @@
 package org.example.outsourcing_project.domain.menu.dto.response;
 
-import org.example.outsourcing_project.common.category.Category;
+import org.example.outsourcing_project.common.enums.Category;
 import org.example.outsourcing_project.domain.menu.entity.Menu;
 
 import lombok.Getter;

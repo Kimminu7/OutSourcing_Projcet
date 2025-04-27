@@ -13,6 +13,9 @@ import org.example.outsourcing_project.domain.menu.entity.Menu;
 import org.example.outsourcing_project.domain.menu.repository.MenuRepository;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
 import org.example.outsourcing_project.domain.shop.repository.ShopRepository;
+import org.example.outsourcing_project.domain.user.UserRole;
+import org.example.outsourcing_project.domain.user.entity.User;
+import org.example.outsourcing_project.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,20 +24,22 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 
-public class MenuServiceImpl implements MenuService{
+public class MenuServiceImpl implements MenuService {
 
 	private final MenuRepository menuRepository;
 	private final ShopRepository shopRepository;
-	// private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	@Override
-	public MenuCreateResponseDto createMenu(Long userId,Long shopId,MenuCreateRequestDto requestDto) {
+	public MenuCreateResponseDto createMenu(Long userId, Long shopId, MenuCreateRequestDto requestDto) {
 
-		// TODO 수정 필요
+		User user = userRepository.findByIdOrElseThrow(userId);
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
-		Menu saveMenu = new Menu(shop,requestDto);
+		validateOwner(user, shop);
+
+		Menu saveMenu = new Menu(shop, requestDto);
 		menuRepository.save(saveMenu);
 
 		return new MenuCreateResponseDto(saveMenu);
@@ -42,16 +47,17 @@ public class MenuServiceImpl implements MenuService{
 
 	@Override
 	@Transactional
-	public MenuUpdateResponseDto updateMenu(Long userId, Long shopId,Long menuId, MenuUpdateRequestDto requestDto) {
+	public MenuUpdateResponseDto updateMenu(Long userId, Long shopId, Long menuId, MenuUpdateRequestDto requestDto) {
 
-		// TODO 수정 필요
+		User user = userRepository.findByIdOrElseThrow(userId);
+
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
+		validateOwner(user, shop);
 
-		Menu menu = menuRepository.findByIdAndShop_ShopId(menuId,shopId)
-				.orElseThrow(()-> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
-
+		Menu menu = menuRepository.findByIdAndShop_ShopId(menuId, shopId)
+			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		menu.update(requestDto);
 
@@ -60,14 +66,19 @@ public class MenuServiceImpl implements MenuService{
 
 	@Override
 	@Transactional
-	public void deleteMenu(Long userid, Long shopId, Long menuId) {
+	public void deleteMenu(Long userId, Long shopId, Long menuId) {
+
+		User user = userRepository.findByIdOrElseThrow(userId);
+
 		Shop shop = shopRepository.findById(shopId)
-			.orElseThrow(()-> new IllegalArgumentException("존재하지 않는 매장입니다."));
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
+
+		validateOwner(user, shop);
 
 		Menu menu = menuRepository.findByIdAndShop_ShopId(menuId, shopId)
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
-		if (!menu.getStatus()){
+		if (!menu.getStatus()) {
 			throw new IllegalArgumentException("이미 삭제된 메뉴입니다.");
 		}
 
@@ -79,7 +90,7 @@ public class MenuServiceImpl implements MenuService{
 	public MenuResponseDto getMenuByShop(Long userId, Long shopId, Long menuId) {
 
 		Shop shop = shopRepository.findById(shopId)
-			.orElseThrow(()-> new IllegalArgumentException("존재하지 않는 매장입니다."));
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
 		Menu menu = menuRepository.findByIdAndShop_ShopId(menuId, shopId)
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
@@ -90,14 +101,20 @@ public class MenuServiceImpl implements MenuService{
 	@Override
 	public List<MenuSearchResponseDto> searchMenuByKeyword(Long shopId, String keyword) {
 
-		List<Menu> searchMenu = menuRepository.findByShop_ShopIdAndNameContaining(shopId,keyword);
+		List<Menu> searchMenu = menuRepository.findByShop_ShopIdAndNameContaining(shopId, keyword);
 
-		List<MenuSearchResponseDto>	responseList = new ArrayList<>();
-		for (Menu menu : searchMenu){
-			if(menu.getStatus()){
+		List<MenuSearchResponseDto> responseList = new ArrayList<>();
+		for (Menu menu : searchMenu) {
+			if (menu.getStatus()) {
 				responseList.add(new MenuSearchResponseDto(menu));
 			}
 		}
 		return responseList;
+	}
+
+	private void validateOwner(User user, Shop shop) {
+		if (!shop.getUser().getUserId().equals(user.getUserId()) || user.getRole() != UserRole.OWNER) {
+			throw new IllegalArgumentException("권한이 없습니다.");
+		}
 	}
 }

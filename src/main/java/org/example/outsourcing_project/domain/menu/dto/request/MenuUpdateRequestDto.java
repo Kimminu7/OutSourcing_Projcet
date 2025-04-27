@@ -1,6 +1,7 @@
 package org.example.outsourcing_project.domain.menu.dto.request;
 
-import org.example.outsourcing_project.common.category.Category;
+import org.checkerframework.checker.units.qual.C;
+import org.example.outsourcing_project.common.enums.Category;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

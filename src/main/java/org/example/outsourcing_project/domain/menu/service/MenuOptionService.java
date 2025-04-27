@@ -8,9 +8,9 @@ import org.example.outsourcing_project.domain.menu.dto.response.MenuOptionUpdate
 import jakarta.validation.Valid;
 
 public interface MenuOptionService {
-	MenuOptionResponseDto createOption(Long shopId, Long menuId, MenuOptionRequestDto dto);
+	MenuOptionResponseDto createOption(Long shopId,Long userId, Long menuId, MenuOptionRequestDto dto);
 
-	MenuOptionUpdateResponseDto updateOption(Long shopId, Long menuId, Long optionId, MenuOptionUpdateRequestDto dto);
+	MenuOptionUpdateResponseDto updateOption(Long shopId, Long userId, Long menuId, Long optionId, MenuOptionUpdateRequestDto dto);
 
-	void deleteOption(Long shopId, Long menuId, Long optionId);
+	void deleteOption(Long shopId, Long userId, Long menuId, Long optionId);
 }
