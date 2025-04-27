@@ -30,6 +30,5 @@ public class ErrorResponse {
         this.fieldErrors = fieldErrors;
     }
 
-    // Getter, Setter 생략 가능 (Lombok 사용하는 경우 @Data 또는 @Getter/@Setter 사용 가능)
 }
 

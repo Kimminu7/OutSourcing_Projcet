@@ -16,7 +16,7 @@ public class MenuOptionResponseDto {
 
 	public MenuOptionResponseDto(MenuOption menuOption) {
 		this.menuId = menuOption.getMenu().getId();
-		this.shopId = menuOption.getMenu().getShop().getShopId();
+		this.shopId = menuOption.getMenu().getShop().getId();
 		this.optionId = menuOption.getId();
 		this.options = menuOption.getOptions();
 		this.price = menuOption.getPrice();

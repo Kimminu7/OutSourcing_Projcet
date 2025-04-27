@@ -22,13 +22,13 @@ public class OperatingHours {
         this.closeTime = closeTime;
     }
     public void updateOpenTime(LocalTime openTime){
-        if (openTime==null){
+        if (openTime!=null){
             this.openTime=openTime;
         }
 
     }
     public void updateCloseTime(LocalTime closeTime){
-        if (closeTime==null){
+        if (closeTime!=null){
             this.closeTime=closeTime;
         }
 

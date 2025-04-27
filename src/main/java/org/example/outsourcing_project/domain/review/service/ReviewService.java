@@ -37,7 +37,7 @@ public class ReviewService {
         User user = userRepository.findById(order.getUserId()).orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER_ID));
 
         //현재 로그인된 유저와 주문의 유저가 같다면 리뷰 저장
-        if(currentUserId.equals(user.getUserId()) && order.getStatus() == OrderStatus.DELIVERED){
+        if(currentUserId.equals(user.getId()) && order.getStatus() == OrderStatus.DELIVERED){
             Review review = new Review(order, requestDto.getContents(), requestDto.getStars());
             Review savedReview = reviewRepository.save(review);
 
@@ -68,7 +68,7 @@ public class ReviewService {
         Order order = review.getOrder();
         User user = userRepository.findById(order.getUserId()).orElseThrow();
 
-        if(currentUserId.equals(user.getUserId())){
+        if(currentUserId.equals(user.getId())){
             if(requestDto.getStars() != null){
                 review.updateStars(requestDto.getStars());
             }
