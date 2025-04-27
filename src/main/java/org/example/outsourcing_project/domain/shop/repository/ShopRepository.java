@@ -12,7 +12,7 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
 
     // 조회용 - 보류, 영구폐점 모두 제외
     @Query("SELECT s FROM Shop s LEFT JOIN FETCH s.user " +
-            "WHERE s.shopId = :shopId " +
+            "WHERE s.id = :shopId " +
             "AND s.shopStatus != 'CLOSED_PERMANENTLY' " +
             "AND s.shopStatus != 'PENDING'")
     Optional<Shop> findByIdWithUser(@Param("shopId") Long shopId);
@@ -22,16 +22,14 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
                 .orElseThrow(() -> new RuntimeException("해당 가게를 찾을 수 없습니다."));
     }
 
-    // 생성용 - 영구폐점만 제외
-    @Query("SELECT s FROM Shop s WHERE s.shopId = :shopId AND s.shopStatus != 'CLOSED_PERMANENTLY'")
-    Optional<Shop> findAvailableShopForCreation(@Param("shopId") Long shopId);
+    //즐겨찾기용
+    @Query("SELECT s FROM Shop s WHERE s.id = :shopId AND s.shopStatus != 'CLOSED_PERMANENTLY'")
+    Optional<Shop> findById(@Param("shopId")Long shopId);
 
-    // 기존 메소드들
+    default Shop findByIdThrowException(Long shopId) {
+        return findById(shopId).orElseThrow(RuntimeException::new);
+    }
 
-//    //추후 admin 용
-//    default Shop findByIdThrowException(Long shopId) {
-//        return findById(shopId).orElseThrow(RuntimeException::new);
-//    }
     //카테고리 조회
     @Query("SELECT s FROM Shop s LEFT JOIN FETCH s.user WHERE s.category = :category " +
             "AND s.shopStatus != 'CLOSED_PERMANENTLY' " +
@@ -43,6 +41,6 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
             "AND s.shopStatus != 'PENDING'")
     List<Shop> findShop();
 
-    @Query("SELECT count(s.shopId) FROM Shop s WHERE s.user.userId = :userId")
+    @Query("SELECT count(s.id) FROM Shop s WHERE s.user.id = :userId AND s.shopStatus != 'CLOSED_PERMANENTLY'")
     int countShopByUserId(@Param("userId") Long userId);
 }

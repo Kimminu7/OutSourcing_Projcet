@@ -95,7 +95,7 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
     // userId (사장님) 검증
     private void validateShop(Long userId, Long shopId) {
         Shop shop = shopRepository.findByIdThrowException(shopId);
-        if (!shop.getUser().getUserId().equals(userId)) {
+        if (!shop.getUser().getId().equals(userId)) {
             throw new RuntimeException("가게 주인이 아닙니다.");
         }
 

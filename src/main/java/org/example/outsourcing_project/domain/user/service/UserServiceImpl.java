@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService{
         // 수정할 유저를 조회
         User findUser = userRepository.findByIdOrElseThrow(userId);
 
-        /**
+        /*
          * 비밀번호가 암호화 되어 있기 때문에 요청할 oldPasswor와 finduser로 찾은 비밀번호를
          * 비교해주는 matches 메소드를 활용 (트러블 슈팅)
          */
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService{
         userRepository.flush();
 
         return new UserResponseDto(
-                findUser.getUserId(),
+                findUser.getId(),
                 findUser.getEmail(),
                 findUser.getName(),
                 findUser.getAddress(),

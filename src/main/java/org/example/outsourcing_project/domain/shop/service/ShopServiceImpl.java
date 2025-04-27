@@ -13,7 +13,6 @@ import org.example.outsourcing_project.domain.shop.dto.response.ShopResponseDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopWithMenuResponse;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
 import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
-import org.example.outsourcing_project.domain.shop.enums.ShopStatusAuth;
 import org.example.outsourcing_project.domain.shop.repository.ShopRepository;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.example.outsourcing_project.domain.user.repository.UserRepository;
@@ -55,7 +54,7 @@ public class ShopServiceImpl implements ShopService {
 //    추후 cash 작업 가능 한다면...
     public List<ShopResponseDto> findAllShop(Category category) {
         List<Shop> shops = (category == null)
-                ? shopRepository.findAll()
+                ? shopRepository.findShop()
                 : shopRepository.findShopByCategory(category);
 
         return shops.stream()
@@ -81,7 +80,7 @@ public class ShopServiceImpl implements ShopService {
 
         Shop shop=shopRepository.findByIdWithUserThrowException(shopId);
 
-        if (!shop.getUser().getUserId().equals(userId)){
+        if (!shop.getUser().getId().equals(userId)){
             throw new RuntimeException("가게 사장이 아닙니다");
         }
 
@@ -94,7 +93,7 @@ public class ShopServiceImpl implements ShopService {
     public void deleteShop(Long shopId, Long userId, ShopDeleteRequestDto shopDeleteRequestDto) {
         Shop shop = shopRepository.findByIdWithUserThrowException(shopId);
 
-        if (!shop.getUser().getUserId().equals(userId)) {
+        if (!shop.getUser().getId().equals(userId)) {
             throw new RuntimeException("가게 사장이 아닙니다");
         }
         if (!passwordEncoder.matches(shopDeleteRequestDto.getPassword(), shop.getUser().getPassword())){
@@ -111,7 +110,7 @@ public class ShopServiceImpl implements ShopService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public ShopStatus calculateCurrentStatus(Long shopId, LocalDateTime dateTime) {
 
-        Shop shop=shopRepository.findByIdWithUserThrowException(shopId);
+        Shop shop=shopRepository.findByIdThrowException(shopId);
 
         // 고정 상태는 그대로 반환
         if (shop.getShopStatus() == ShopStatus.CLOSED_PERMANENTLY || shop.getShopStatus() == ShopStatus.PENDING) {

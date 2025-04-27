@@ -27,7 +27,7 @@ public class ShopStatusScheduler {
     public void updateShopStars() {
         List<Shop> shops = shopRepository.findAll();
         for (Shop shop : shops) {
-            ShopStatus calculatedStatus = shopService.calculateCurrentStatus(shop.getShopId(), LocalDateTime.now());
+            ShopStatus calculatedStatus = shopService.calculateCurrentStatus(shop.getId(), LocalDateTime.now());
 
             if (shop.getShopStatusAuth() == ShopStatusAuth.MANUAL) {
 

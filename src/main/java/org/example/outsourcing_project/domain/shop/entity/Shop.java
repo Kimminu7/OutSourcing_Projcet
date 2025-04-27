@@ -23,12 +23,12 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "shop")
-@SQLDelete(sql = "UPDATE shops SET shop_status = 'CLOSED_PERMANENTLY' WHERE shop_id = ?")//소프트
+@SQLDelete(sql = "UPDATE shop SET shop_status = 'CLOSED_PERMANENTLY' WHERE shop_id = ?")//소프트
 
 public class Shop extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long shopId;
+    private Long id;
 
     @Column(nullable = false, length = 100)
     private String shopName;
@@ -59,26 +59,19 @@ public class Shop extends BaseTimeEntity {
 
 
     @ElementCollection(targetClass = ShopDayOfWeek.class)
-    @CollectionTable(name = "shop_closed_days", joinColumns = @JoinColumn(name = "shop_id"))
+    @CollectionTable(name = "shop_closed_days", joinColumns = @JoinColumn(name = "shop_id")) // 'id'가 아니라 'shop_id'로 수정
     @Enumerated(EnumType.STRING)
     @Column(name = "day")
     @JsonDeserialize(contentUsing = DayOfWeekDeserializer.class)
     @Builder.Default
     private List<ShopDayOfWeek> closedDays = new ArrayList<>();
 
-    @PrePersist
-    public void prePersist() {
-        if (this.closedDays == null) {
-            this.closedDays = new ArrayList<>();
-        }
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")  // 'user_id'로 정확히 정의
+    private User user;
 
     @Enumerated(EnumType.STRING)
     private Category category;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     @Builder.Default

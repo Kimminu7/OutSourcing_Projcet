@@ -55,18 +55,14 @@ public class ShopDeliveryController {
 
 
 
-        return ResponseEntity.ok().build();
-
-
+        return ResponseEntity.ok().body(shopDeliveryService.findAll(shopId,userId));
     }
     @GetMapping("/{orderId}")
     public ResponseEntity<ShopDeliveryResponseDto> findOrder(@PathVariable Long shopId,
                                             @PathVariable Long orderId,
                                             @LoginUser Long userId ){
 
-        return ResponseEntity.ok().build();
-
-
+        return ResponseEntity.ok().body(shopDeliveryService.findOrder(orderId,shopId,userId));
     }
 
 

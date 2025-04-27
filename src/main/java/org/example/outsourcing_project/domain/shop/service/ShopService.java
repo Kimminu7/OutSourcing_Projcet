@@ -5,7 +5,6 @@ import org.example.outsourcing_project.common.enums.Category;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopDeleteRequestDto;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopPatchRequestDto;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopRequestDto;
-import org.example.outsourcing_project.domain.shop.dto.response.ShopDeliveryResponseDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopResponseDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopWithMenuResponse;
 import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
