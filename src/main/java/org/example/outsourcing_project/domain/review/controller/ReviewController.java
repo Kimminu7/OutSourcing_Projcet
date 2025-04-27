@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.outsourcing_project.common.exception.ErrorCode;
 import org.example.outsourcing_project.common.exception.custom.BaseException;
+import org.example.outsourcing_project.common.jwt.LoginUser;
 import org.example.outsourcing_project.domain.review.dto.request.ReviewRequestDto;
 import org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto;
 import org.example.outsourcing_project.domain.review.service.ReviewService;
@@ -22,7 +23,7 @@ public class ReviewController {
     //리뷰 생성
     @PostMapping("/{orderId}")
     public ResponseEntity<ReviewResponseDto> createReview (
-            @RequestParam Long userId, //임시 유저ID
+            @LoginUser Long userId,
             @PathVariable Long orderId,
             @Valid @RequestBody ReviewRequestDto requestDto
     ){
@@ -49,7 +50,7 @@ public class ReviewController {
     //리뷰 수정
     @PatchMapping("/{reviewId}")
     public ResponseEntity<ReviewResponseDto> editReview (
-            @RequestParam Long userId, //임시 유저ID
+            @LoginUser Long userId,
             @PathVariable Long reviewId,
             @RequestBody ReviewRequestDto requestDto
     ){
@@ -60,7 +61,7 @@ public class ReviewController {
     //리뷰 삭제
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> deleteReview (
-            @RequestParam Long userId, //임시 유저ID
+            @LoginUser Long userId,
             @PathVariable Long reviewId
     ){
         reviewService.deleteReview(userId, reviewId);
