@@ -86,7 +86,7 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
     // orderId, shopId 매칭 검증
     private Order validateOrder(Long orderId, Long shopId) {
         Order order = orderRepository.findByIdWithUserThrowException(orderId);
-        if (!order.getStoreId().equals(shopId)) {
+        if (!order.getShop().getId().equals(shopId)) {
             throw new RuntimeException("가게를 제대로 로그인 하셨는지 확인 해주세요");
         }
         return order;
