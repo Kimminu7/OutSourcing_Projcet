@@ -2,6 +2,7 @@ package org.example.outsourcing_project.domain.menu.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
@@ -30,6 +31,7 @@ public class MenuServiceImpl implements MenuService {
 	private final ShopRepository shopRepository;
 	private final UserRepository userRepository;
 
+	// 메뉴 저장
 	@Override
 	public MenuCreateResponseDto createMenu(Long userId, Long shopId, MenuCreateRequestDto requestDto) {
 
@@ -78,7 +80,7 @@ public class MenuServiceImpl implements MenuService {
 		Menu menu = menuRepository.findByIdAndShopId(menuId, shopId)
 			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
-		if (!menu.getStatus()) {
+		if (menu.getStatus().equals(false)) {
 			throw new IllegalArgumentException("이미 삭제된 메뉴입니다.");
 		}
 
@@ -87,21 +89,24 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public MenuResponseDto getMenuByShop(Long userId, Long shopId, Long menuId) {
+	public MenuResponseDto getMenuByShop(Long shopId, Long menuId) {
 
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
-		Menu menu = menuRepository.findByIdAndShopId(menuId, shopId)
-			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
 
-		return new MenuResponseDto(menu);
+		Menu menus = menuRepository.findByIdAndShopIdAndStatusTrue(menuId, shopId)
+			.orElseThrow(()->new IllegalArgumentException("삭제된 메뉴는 조회할 수 없습니다."));
+
+		return new MenuResponseDto(menus);
 	}
 
 	@Override
 	public List<MenuSearchResponseDto> searchMenuByKeyword(Long shopId, String keyword) {
 
-		List<Menu> searchMenu = menuRepository.findByIdAndNameContaining(shopId, keyword);
+		List<Menu> searchMenu = menuRepository.findByShopIdAndNameContaining(shopId, keyword);
 
 		List<MenuSearchResponseDto> responseList = new ArrayList<>();
 		for (Menu menu : searchMenu) {

@@ -17,7 +17,7 @@ public interface MenuService {
 
 	void deleteMenu(Long userid, Long shopid, Long menuid);
 
-	MenuResponseDto getMenuByShop(Long userId,Long shopId, Long menuId);
+	MenuResponseDto getMenuByShop(Long shopId, Long menuId);
 
 	List<MenuSearchResponseDto> searchMenuByKeyword(Long shopId, String keyword);
 

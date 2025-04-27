@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MenuRepository extends JpaRepository<Menu, Long> {
 	Optional<Menu> findByIdAndShopId(Long id, Long shopid);
 
-	List<Menu> findByIdAndNameContaining(Long shopId, String name);
+	List<Menu> findByShopIdAndNameContaining(Long shopId, String name);
+
+	Optional<Menu> findByIdAndShopIdAndStatusTrue(Long menuid, Long shopId);
 
 }

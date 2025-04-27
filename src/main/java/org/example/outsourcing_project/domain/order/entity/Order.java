@@ -46,6 +46,7 @@ public class Order extends BaseTimeEntity {
 	public Order(User user, Shop shop, Menu menu) {
 		this.user = user;
 		this.shop = shop;
+		this.menu = menu;
 		this.status = OrderStatus.ORDERED;
 	}
 

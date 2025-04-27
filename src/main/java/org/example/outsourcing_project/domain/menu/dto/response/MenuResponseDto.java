@@ -17,6 +17,7 @@ public class MenuResponseDto {
 	private String name;
 	private int price;
 	private Category category;
+	private boolean status;
 	private List<MenuOptionResponseDto> menuOptions;
 
 	public MenuResponseDto(Menu menu) {
@@ -26,6 +27,7 @@ public class MenuResponseDto {
 		this.name = menu.getName();
 		this.price = menu.getPrice();
 		this.category = menu.getCategory();
+		this.status = menu.getStatus();
 
 		this.menuOptions = new ArrayList<>();
 		for (MenuOption option : menu.getMenuOptions()){

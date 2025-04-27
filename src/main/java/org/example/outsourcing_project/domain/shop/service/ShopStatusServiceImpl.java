@@ -38,7 +38,7 @@ public class ShopStatusServiceImpl implements ShopStatusService{
 
 
     private Shop validateShop(Long userId, Long shopId) {
-        Shop shop = shopRepository.findByIdWithUserThrowException(shopId);
+        Shop shop = shopRepository.findById(shopId).orElseThrow(()->new RuntimeException("수고링"));
         if (!shop.getUser().getId().equals(userId)) {
             throw new RuntimeException("가게 주인이 아닙니다.");
         }

@@ -48,11 +48,10 @@ public class MenuController {
 	@GetMapping("/menus/{menuId}")
 	public ResponseEntity<MenuResponseDto> menuInfo(
 		@PathVariable Long shopId,
-		@LoginUser Long userId,
 		@PathVariable Long menuId
 	){
 
-		MenuResponseDto menuResponseDto = menuService.getMenuByShop(userId,shopId,menuId);
+		MenuResponseDto menuResponseDto = menuService.getMenuByShop(shopId,menuId);
 
 		return new ResponseEntity<>(menuResponseDto,HttpStatus.OK);
 	}

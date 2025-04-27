@@ -46,7 +46,7 @@ public class OrderService {
 		Shop shop = shopRepository.findByIdThrowException(firstMenu.getShop().getId());
 
 		// 가게 상태 확인
-		if (shopService.calculateCurrentStatus(shop.getId(), LocalDateTime.now()) != ShopStatus.OPEN) {
+		if (shop.getShopStatus() != ShopStatus.OPEN){
 			throw new IllegalStateException("해당 가게는 현재 영업 중이 아닙니다.");
 		}
 
