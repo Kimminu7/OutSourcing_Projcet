@@ -1,58 +1,59 @@
 package org.example.outsourcing_project.domain.order.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.outsourcing_project.common.entity.BaseTimeEntity;
+import org.example.outsourcing_project.domain.shop.entity.Shop;
+import org.example.outsourcing_project.domain.user.entity.User;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Order {
+@AllArgsConstructor
+@Builder(toBuilder = true)
+@Table(name = "orders")
+public class Order extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private Long userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
-	@Column(nullable = false)
-	private Long storeId;
-
-	@Column(nullable = false)
-	private Long menuId;
-
-	@Column(nullable = false)
-	private Integer quantity;
-
-	@Column(nullable = false)
-	private Integer totalPrice;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "shop_id")
+	private Shop shop;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private OrderStatus status;
 
-	@Column(nullable = false)
-	private LocalDateTime orderedAt;
+	// 1:N 관계 추가
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	private List<OrderMenu> orderMenus = new ArrayList<>();
 
-	@Column(nullable = false)
-	private LocalDateTime updatedAt;
-
-	public Order(Long userId, Long storeId, Long menuId, Integer quantity, Integer totalPrice) {
-		this.userId = userId;
-		this.storeId = storeId;
-		this.menuId = menuId;
-		this.quantity = quantity;
-		this.totalPrice = totalPrice;
+	//초기 생성용
+	public Order(User user, Shop shop) {
+		this.user = user;
+		this.shop = shop;
 		this.status = OrderStatus.ORDERED;
-		this.orderedAt = LocalDateTime.now();
-		this.updatedAt = LocalDateTime.now();
 	}
 
 	public void updateStatus(OrderStatus status) {
 		this.status = status;
-		this.updatedAt = LocalDateTime.now();
+	}
+
+	// OrderMenu 추가용 편의 메소드
+	public void addOrderMenu(OrderMenu orderMenu) {
+		orderMenus.add(orderMenu);
+		orderMenu.setOrder(this);
 	}
 }

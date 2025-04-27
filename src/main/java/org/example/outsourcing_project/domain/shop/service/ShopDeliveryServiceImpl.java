@@ -75,7 +75,7 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
         Order order = orderRepository.findByIdWithUserAndShop(orderId)
                 .orElseThrow(() -> new RuntimeException("해당 주문을 찾을 수 없습니다."));
 
-        if (!order.getStoreId().equals(shopId)) {
+        if (!order.getId().equals(shopId)) {
             throw new RuntimeException("가게를 제대로 로그인 하셨는지 확인 해주세요");
         }
 
