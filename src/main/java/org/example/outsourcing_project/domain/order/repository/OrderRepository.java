@@ -18,12 +18,19 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                 .orElseThrow(() -> new RuntimeException("해당 주문을 찾을 수 없습니다."));
     }
 
-    @Query("SELECT o FROM Order o LEFT JOIN FETCH o.shop LEFT JOIN FETCH o.user WHERE o.shop.id = :storeId")
+    @Query("SELECT o FROM Order o LEFT JOIN FETCH o.shop LEFT JOIN FETCH o.user WHERE o.shop.id = :stopId")
     List<Order> findByShopId(@Param("storeId") Long shopId);
+
+    @Query("SELECT o FROM Order o LEFT JOIN FETCH o.shop LEFT JOIN FETCH o.user WHERE o.user.id = :userId")
+    List<Order> findByUserId(@Param("storeId") Long userId);
 
 
     @Query("SELECT o FROM Order o LEFT JOIN FETCH o.shop LEFT JOIN FETCH o.user WHERE o.id = :orderId")
     Optional<Order> findByIdWithUserAndShop(@Param("orderId") Long orderId);
+
+    @Query("SELECT AVG(r.stars) FROM Review r WHERE r.order.menu.id = :menuId")
+    Double calculateAverageStarByMenuId(@Param("menuId") Long menuId);
+
 
 
 }

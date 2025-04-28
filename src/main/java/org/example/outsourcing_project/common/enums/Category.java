@@ -6,7 +6,7 @@ import org.example.outsourcing_project.common.exception.custom.BaseException;
 
 import java.util.Arrays;
 
-import static org.example.outsourcing_project.common.exception.ErrorCode.INVALID_Category;
+import static org.example.outsourcing_project.common.exception.ErrorCode.INVALID_CATEGORY;
 
 @AllArgsConstructor
 public enum Category {
@@ -23,12 +23,12 @@ public enum Category {
     @JsonCreator
     public static Category from(String input) {
         if (input == null || input.trim().isEmpty()) {
-            throw new BaseException(INVALID_Category);
+            throw new BaseException(INVALID_CATEGORY);
         }
         return Arrays.stream(values())
                 .filter(c -> c.name().equalsIgnoreCase(input) || c.label.equalsIgnoreCase(input))
                 .findFirst()
-                .orElseThrow(() -> new BaseException(INVALID_Category));
+                .orElseThrow(() -> new BaseException(INVALID_CATEGORY));
     }
 
 }

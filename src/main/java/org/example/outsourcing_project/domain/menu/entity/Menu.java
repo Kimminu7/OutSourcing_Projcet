@@ -49,6 +49,8 @@ public class Menu extends BaseTimeEntity {
 	@Column(nullable = false)
 	private Boolean status = true;
 
+	private Double star;
+
 	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MenuOption> menuOptions = new ArrayList<>();
 
@@ -70,6 +72,10 @@ public class Menu extends BaseTimeEntity {
 
 	public void softDelete(){
 		this.status = false;
+	}
+
+	public void updateStars(Double star){
+		this.star=star;
 	}
 
 }

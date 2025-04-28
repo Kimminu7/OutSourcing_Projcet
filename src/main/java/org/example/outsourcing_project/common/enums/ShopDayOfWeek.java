@@ -8,7 +8,6 @@ import org.example.outsourcing_project.common.exception.custom.BaseException;
 
 import java.util.Arrays;
 
-import static org.example.outsourcing_project.common.exception.ErrorCode.INVALID_Category;
 import static org.example.outsourcing_project.common.exception.ErrorCode.INVALID_DAY;
 
 @AllArgsConstructor

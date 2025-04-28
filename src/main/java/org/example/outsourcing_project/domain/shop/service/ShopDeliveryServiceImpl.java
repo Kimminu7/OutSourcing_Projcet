@@ -1,6 +1,8 @@
 package org.example.outsourcing_project.domain.shop.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.outsourcing_project.common.exception.ErrorCode;
+import org.example.outsourcing_project.common.exception.custom.BaseException;
 import org.example.outsourcing_project.domain.order.entity.Order;
 import org.example.outsourcing_project.domain.order.entity.OrderStatus;
 import org.example.outsourcing_project.domain.order.repository.OrderRepository;
@@ -27,8 +29,8 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
     public void deliveryAccept(Long orderId, Long shopId, Long userId) {
         validateShop(userId, shopId);
         Order order = validateOrder(orderId, shopId);
-        if (order.getStatus()!=OrderStatus.ORDERED){
-            throw new RuntimeException("주문이 생성되지 않았습니다");
+        if (order.getStatus() != OrderStatus.ORDERED) {
+            throw new BaseException(ErrorCode.NOT_FOUND_ORDER);
         }
         order.updateStatus(OrderStatus.ACCEPTED);
     }
@@ -38,8 +40,8 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
     public void startCooking(Long orderId, Long shopId, Long userId) {
         validateShop(userId, shopId);
         Order order = validateOrder(orderId, shopId);
-        if (order.getStatus()!=OrderStatus.ACCEPTED){
-            throw new RuntimeException("주문을 받지 않았습니다");
+        if (order.getStatus() != OrderStatus.ACCEPTED) {
+            throw new BaseException(ErrorCode.ORDER_NOT_STARTED);
         }
         order.updateStatus(OrderStatus.COOKING);
     }
@@ -49,8 +51,8 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
     public void startDelivering(Long orderId, Long shopId, Long userId) {
         validateShop(userId, shopId);
         Order order = validateOrder(orderId, shopId);
-        if (order.getStatus()!=OrderStatus.ORDERED){
-            throw new RuntimeException("요리를 시작하지 않았습니다");
+        if (order.getStatus() != OrderStatus.COOKING) {
+            throw new BaseException(ErrorCode.ORDER_NOT_CREATED);
         }
         order.updateStatus(OrderStatus.DELIVERING);
     }
@@ -58,12 +60,8 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
     @Override
     @Transactional(readOnly = true)
     public List<ShopDeliveryResponseDto> findAll(Long shopId, Long userId) {
-
-        //아직 commit 안함
         validateShop(userId, shopId);
-        //오더를 가져야 합니다.
-        List<Order> orders = orderRepository.findByShopId(shopId); // ❗ 가게 주문만 조회해야 함
-
+        List<Order> orders = orderRepository.findByShopId(shopId);
         return orders.stream()
                 .map(ShopDeliveryResponseDto::from)
                 .collect(Collectors.toList());
@@ -75,17 +73,15 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
         validateShop(userId, shopId);
 
         Order order = orderRepository.findByIdWithUserAndShop(orderId)
-                .orElseThrow(() -> new RuntimeException("해당 주문을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_ORDER_ID));
 
-        if (!order.getId().equals(shopId)) {
+        if (!order.getShop().getId().equals(shopId)) {
             throw new NotFoundShop();
         }
 
         return ShopDeliveryResponseDto.from(order);
     }
 
-
-    // orderId, shopId 매칭 검증
     private Order validateOrder(Long orderId, Long shopId) {
         Order order = orderRepository.findByIdWithUserThrowException(orderId);
         if (!order.getShop().getId().equals(shopId)) {
@@ -94,7 +90,6 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
         return order;
     }
 
-    // userId (사장님) 검증
     private void validateShop(Long userId, Long shopId) {
         Shop shop = shopRepository.findByIdThrowException(shopId);
         if (!shop.getUser().getId().equals(userId)) {
