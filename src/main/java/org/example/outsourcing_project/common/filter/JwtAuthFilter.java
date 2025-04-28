@@ -13,7 +13,7 @@ import java.util.List;
 public class JwtAuthFilter implements Filter {
 
     private final JwtProvider jwtProvider;
-    private final List<String> WHITE_LIST = List.of("/", "/authors/**");
+    private final List<String> WHITE_LIST = List.of("/", "/authors/**" , "/users/list");
 
     public JwtAuthFilter(JwtProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
