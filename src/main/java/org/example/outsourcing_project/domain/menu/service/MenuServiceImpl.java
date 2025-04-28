@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.example.outsourcing_project.common.exception.ErrorCode;
+import org.example.outsourcing_project.common.exception.custom.BaseException;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuCreateResponseDto;
@@ -37,7 +39,7 @@ public class MenuServiceImpl implements MenuService {
 
 		User user = userRepository.findByIdOrElseThrow(userId);
 		Shop shop = shopRepository.findById(shopId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
+			.orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SHOP));
 
 		validateOwner(user, shop);
 
@@ -54,12 +56,12 @@ public class MenuServiceImpl implements MenuService {
 		User user = userRepository.findByIdOrElseThrow(userId);
 
 		Shop shop = shopRepository.findById(shopId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
+			.orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SHOP));
 
 		validateOwner(user, shop);
 
 		Menu menu = menuRepository.findByIdAndShopId(menuId, shopId)
-			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
+			.orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_MENU));
 
 		menu.update(requestDto);
 
@@ -73,12 +75,12 @@ public class MenuServiceImpl implements MenuService {
 		User user = userRepository.findByIdOrElseThrow(userId);
 
 		Shop shop = shopRepository.findById(shopId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
+			.orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SHOP));
 
 		validateOwner(user, shop);
 
 		Menu menu = menuRepository.findByIdAndShopId(menuId, shopId)
-			.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
+			.orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_MENU));
 
 		if (menu.getStatus().equals(false)) {
 			throw new IllegalArgumentException("이미 삭제된 메뉴입니다.");
@@ -92,13 +94,13 @@ public class MenuServiceImpl implements MenuService {
 	public MenuResponseDto getMenuByShop(Long shopId, Long menuId) {
 
 		Shop shop = shopRepository.findById(shopId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
+			.orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_SHOP));
 
 		Menu menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
+			.orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_MENU));
 
 		Menu menus = menuRepository.findByIdAndShopIdAndStatusTrue(menuId, shopId)
-			.orElseThrow(()->new IllegalArgumentException("삭제된 메뉴는 조회할 수 없습니다."));
+			.orElseThrow(()->new BaseException(ErrorCode.DELETED_MENU));
 
 		return new MenuResponseDto(menus);
 	}
@@ -119,7 +121,7 @@ public class MenuServiceImpl implements MenuService {
 
 	private void validateOwner(User user, Shop shop) {
 		if (!shop.getUser().getId().equals(user.getId()) || user.getRole() != UserRole.OWNER) {
-			throw new IllegalArgumentException("권한이 없습니다.");
+			throw new BaseException(ErrorCode.FORBIDDEN_ACCESS);
 		}
 	}
 }
