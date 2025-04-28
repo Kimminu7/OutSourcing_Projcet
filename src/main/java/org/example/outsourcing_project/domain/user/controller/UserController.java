@@ -20,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     // 전체 유저 조회
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<UserResponseDto>> findAll(){
 
         List<UserResponseDto> responseDtoList = userService.findAll();
