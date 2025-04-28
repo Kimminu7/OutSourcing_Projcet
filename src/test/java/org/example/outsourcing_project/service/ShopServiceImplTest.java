@@ -2,6 +2,8 @@ package org.example.outsourcing_project.service;
 
 import org.example.outsourcing_project.common.enums.Category;
 import org.example.outsourcing_project.common.enums.ShopDayOfWeek;
+
+
 import org.example.outsourcing_project.domain.menu.repository.MenuRepository;
 import org.example.outsourcing_project.domain.order.repository.OrderRepository;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopRequestDto;
@@ -89,9 +91,13 @@ class ShopServiceImplTest {
         Shop shop=shopRequestDto.toEntity(user);
         ShopResponseDto.from(shop);
         //given : 내가 사용한 mock들은 어떤 값을 줄까?
+
         given(userRepository.findByIdOrElseThrow(1L)).willReturn(user);
         assertThatThrownBy(() -> shopService.saveShop(1L,shopRequestDto))
                 .isInstanceOf(UnauthorizedOwner.class);
+
+=======
+      
 
 
     }
@@ -105,10 +111,12 @@ class ShopServiceImplTest {
         Shop shop=shopRequestDto.toEntity(user);
         ShopResponseDto.from(shop);
         //given : 내가 사용한 mock들은 어떤 값을 줄까?
+
         given(userRepository.findByIdOrElseThrow(1L)).willReturn(user);
         given(shopRepository.countShopByUserId(1L)).willReturn(4);
         assertThatThrownBy(() -> shopService.saveShop(1L,shopRequestDto))
                 .isInstanceOf(ForbiddenOwnerCount.class);
+
 
     }
 
