@@ -69,7 +69,7 @@ public class ShopServiceImpl implements ShopService {
 
         return shops.stream()
                 .map(ShopResponseDto::from)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
