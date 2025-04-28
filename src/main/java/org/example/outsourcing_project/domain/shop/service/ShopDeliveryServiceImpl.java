@@ -6,6 +6,8 @@ import org.example.outsourcing_project.domain.order.entity.OrderStatus;
 import org.example.outsourcing_project.domain.order.repository.OrderRepository;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopDeliveryResponseDto;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
+import org.example.outsourcing_project.domain.shop.exception.ForbiddenOwner;
+import org.example.outsourcing_project.domain.shop.exception.NotFoundShop;
 import org.example.outsourcing_project.domain.shop.repository.ShopRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,7 +78,7 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
                 .orElseThrow(() -> new RuntimeException("해당 주문을 찾을 수 없습니다."));
 
         if (!order.getId().equals(shopId)) {
-            throw new RuntimeException("가게를 제대로 로그인 하셨는지 확인 해주세요");
+            throw new NotFoundShop();
         }
 
         return ShopDeliveryResponseDto.from(order);
@@ -87,7 +89,7 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
     private Order validateOrder(Long orderId, Long shopId) {
         Order order = orderRepository.findByIdWithUserThrowException(orderId);
         if (!order.getShop().getId().equals(shopId)) {
-            throw new RuntimeException("가게를 제대로 로그인 하셨는지 확인 해주세요");
+            throw new NotFoundShop();
         }
         return order;
     }
@@ -96,7 +98,7 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
     private void validateShop(Long userId, Long shopId) {
         Shop shop = shopRepository.findByIdThrowException(shopId);
         if (!shop.getUser().getId().equals(userId)) {
-            throw new RuntimeException("가게 주인이 아닙니다.");
+            throw new ForbiddenOwner();
         }
 
 

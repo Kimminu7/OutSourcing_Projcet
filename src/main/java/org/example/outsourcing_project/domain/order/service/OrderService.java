@@ -16,6 +16,7 @@ import org.example.outsourcing_project.domain.order.repository.OrderRepository;
 import org.example.outsourcing_project.domain.order.repository.OrderStatusLogRepository;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
 import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
+import org.example.outsourcing_project.domain.shop.enums.ShopStatusAuth;
 import org.example.outsourcing_project.domain.shop.repository.ShopRepository;
 import org.example.outsourcing_project.domain.shop.service.ShopService;
 import org.example.outsourcing_project.domain.user.entity.User;
@@ -46,7 +47,10 @@ public class OrderService {
 		Shop shop = shopRepository.findByIdThrowException(firstMenu.getShop().getId());
 
 		// 가게 상태 확인
-		if (shop.getShopStatus() != ShopStatus.OPEN){
+		if (shopService.calculateCurrentStatus(shop.getId(),LocalDateTime.now())!= ShopStatus.OPEN&&shop.getShopStatusAuth()== ShopStatusAuth.AUTO){
+			throw new IllegalStateException("해당 가게는 현재 영업 중이 아닙니다.");
+		}
+		if (shop.getShopStatus()!= ShopStatus.OPEN&&shop.getShopStatusAuth()== ShopStatusAuth.MANUAL){
 			throw new IllegalStateException("해당 가게는 현재 영업 중이 아닙니다.");
 		}
 

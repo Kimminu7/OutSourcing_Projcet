@@ -4,8 +4,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.outsourcing_project.common.converter.DayOfWeekDeserializer;
+import org.example.outsourcing_project.common.exception.custom.BaseException;
 
 import java.util.Arrays;
+
+import static org.example.outsourcing_project.common.exception.ErrorCode.INVALID_Category;
+import static org.example.outsourcing_project.common.exception.ErrorCode.INVALID_DAY;
 
 @AllArgsConstructor
 @Getter
@@ -26,6 +30,6 @@ public enum ShopDayOfWeek {
         return Arrays.stream(values())
                 .filter(d -> d.name().equalsIgnoreCase(input) || d.label.equalsIgnoreCase(input))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 요일입니다: " + input));
+                .orElseThrow(() ->  new BaseException(INVALID_DAY));
     }
 }

@@ -23,4 +23,5 @@ public class OrderMenuCreateRequest {
         this.menuId = menuId;
         this.quantity = quantity;
     }
+
 }
