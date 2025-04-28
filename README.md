@@ -62,7 +62,7 @@ org.example.outsourcing_project
 | 이소미 |  | 기능 메뉴(Menu) CRUD
 | 임경수  | 가게(Shop) CRUD 및 검색  |
 | 정이슬  | 주문(Order) 기능 전체 구현  |
-| 장희수 | 리뷰(Review) CRUD 및 별점 필터 조회|
+| 장희수 | 리뷰(Review) CRUD 및 별점 필터 조회 |
 
 ---
 
