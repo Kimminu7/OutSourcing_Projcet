@@ -96,10 +96,6 @@ class ShopServiceImplTest {
         assertThatThrownBy(() -> shopService.saveShop(1L,shopRequestDto))
                 .isInstanceOf(UnauthorizedOwner.class);
 
-=======
-      
-
-
     }
     @Test
     void saveShop_FAIL_cause_over_3() {

@@ -95,5 +95,7 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
         if (!shop.getUser().getId().equals(userId)) {
             throw new ForbiddenOwner();
         }
+
+
     }
 }

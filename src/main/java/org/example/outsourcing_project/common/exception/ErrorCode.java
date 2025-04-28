@@ -32,14 +32,13 @@ public enum ErrorCode {
     FORBIDDEN_DELETE_REVIEW("본인의 리뷰만 삭제할 수 있습니다.", HttpStatus.FORBIDDEN, "403-003s"),
 
     // 메뉴
-    NOT_FOUND_SHOP("매장을 찾을 수 없습니다.", HttpStatus.NOT_FOUND, "404-009"),
     NOT_FOUND_MENU("메뉴를 찾을 수 없습니다.", HttpStatus.NOT_FOUND, "404-010"),
     DELETED_MENU("삭제된 메뉴는 조회할 수 없습니다.", HttpStatus.BAD_REQUEST, "400-003"),
     FORBIDDEN_ACCESS("권한이 없습니다.", HttpStatus.FORBIDDEN, "403-004"),
     // 메뉴 옵션
     NOT_FOUND_OPTION("옵션을 찾을 수 없습니다.", HttpStatus.NOT_FOUND, "404-010"),
     INVALID_MENU_OPTION_RELATION("옵션이 해당 메뉴에 속하지 않습니다.", HttpStatus.BAD_REQUEST, "400-004"),
-    ALREADY_DELETED_OPTION("이미 삭제된 옵션입니다.", HttpStatus.BAD_REQUEST, "400-005");
+    ALREADY_DELETED_OPTION("이미 삭제된 옵션입니다.", HttpStatus.BAD_REQUEST, "400-005"),
 
     NOT_FOUND_ORDER("주문을 받지 않았습니다.", HttpStatus.NOT_FOUND, "404-009"),
     ORDER_NOT_STARTED("요리를 시작하지 않았습니다.", HttpStatus.BAD_REQUEST, "400-004"),
