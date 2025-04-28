@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MenuRepository extends JpaRepository<Menu, Long> {
 	@EntityGraph(attributePaths = "menuOptions")
-	Optional<Menu> findByIdAndShop_ShopId(Long id, Long shopid);
+	Optional<Menu> findByIdAndShop_id(Long id, Long shopid);
 
-	List<Menu> findByShop_ShopIdAndNameContaining(Long shopId, String keyword);
+	List<Menu> findByShop_idAndNameContaining(Long shopId, String keyword);
 }

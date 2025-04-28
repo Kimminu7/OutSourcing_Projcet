@@ -16,8 +16,8 @@ public interface ReviewRepository extends JpaRepository <Review, Long> {
             "new org.example.outsourcing_project.domain.review.dto.response.ReviewResponseDto(r.contents, r.stars, u.name, m.menu_name, r.createdAt, r.updatedAt) "+
             "FROM Review r "+
             "JOIN r.order o "+
-            "JOIN User u ON u.userId = o.userId " +
-            "JOIN Menu m ON m.menuId = o.menuId " +
+            "JOIN User u ON u.id = o.userId " +
+            "JOIN Menu m ON m.id = o.menuId " +
             "WHERE r.stars BETWEEN :min AND :max ")
     List<ReviewResponseDto> getReviewsByFilter(
             @Param("min") Integer min,

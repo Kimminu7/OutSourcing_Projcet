@@ -1,6 +1,6 @@
 package org.example.outsourcing_project.domain.menu.dto.response;
 
-import org.example.outsourcing_project.common.category.Category;
+import org.example.outsourcing_project.common.enums.Category;
 import org.example.outsourcing_project.domain.menu.entity.Menu;
 
 import lombok.Getter;
@@ -19,7 +19,7 @@ public class MenuCreateResponseDto {
 
 	public MenuCreateResponseDto(Menu menu) {
 		this.menuId = menu.getId();
-		this.shopId = menu.getShop().getShopId();
+		this.shopId = menu.getShop().getId();
 		this.name = menu.getName();
 		this.price = menu.getPrice();
 		this.category = menu.getCategory();

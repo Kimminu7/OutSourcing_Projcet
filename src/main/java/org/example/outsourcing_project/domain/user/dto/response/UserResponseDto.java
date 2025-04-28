@@ -27,7 +27,7 @@ public class UserResponseDto {
 
     public static UserResponseDto toDto(User user) {
         return new UserResponseDto(
-                user.getUserId(),
+                user.getId(),
                 user.getEmail(),
                 user.getName(),
                 user.getAddress(),

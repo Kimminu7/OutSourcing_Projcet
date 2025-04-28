@@ -1,6 +1,5 @@
 package org.example.outsourcing_project.domain.shop.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
