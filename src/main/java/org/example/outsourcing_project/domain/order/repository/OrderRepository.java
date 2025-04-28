@@ -28,6 +28,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o LEFT JOIN FETCH o.shop LEFT JOIN FETCH o.user WHERE o.id = :orderId")
     Optional<Order> findByIdWithUserAndShop(@Param("orderId") Long orderId);
 
+    @Query("SELECT AVG(r.stars) FROM Review r WHERE r.order.menu.id = :menuId")
+    Double calculateAverageStarByMenuId(@Param("menuId") Long menuId);
+
+
 
 }
 
