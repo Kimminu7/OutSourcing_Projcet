@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/shops/{shopId}")
+@RequestMapping("/shops/{shopId}/delivery")
 @RequiredArgsConstructor
 public class ShopDeliveryController {
     private final ShopDeliveryService shopDeliveryService;
 
-    @PatchMapping("/{orderId/accept}")
+    @PatchMapping("/{orderId}/accept")
     public ResponseEntity<Void> deliveryAccept(@PathVariable Long shopId,
                                        @PathVariable Long orderId, @LoginUser Long userId ){
 
@@ -25,7 +25,7 @@ public class ShopDeliveryController {
 
 
     }
-    @PatchMapping("/{orderId/cook")
+    @PatchMapping("/{orderId}/cook")
     public ResponseEntity<Void> startCooking (@PathVariable Long shopId,
                                        @PathVariable Long orderId,
                                        @LoginUser Long userId ){

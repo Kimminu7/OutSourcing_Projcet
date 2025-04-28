@@ -2,8 +2,11 @@ package org.example.outsourcing_project.common.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
+import org.example.outsourcing_project.common.exception.custom.BaseException;
 
 import java.util.Arrays;
+
+import static org.example.outsourcing_project.common.exception.ErrorCode.INVALID_Category;
 
 @AllArgsConstructor
 public enum Category {
@@ -20,12 +23,12 @@ public enum Category {
     @JsonCreator
     public static Category from(String input) {
         if (input == null || input.trim().isEmpty()) {
-            throw new IllegalArgumentException("입력값이 null이거나 공백입니다.");
+            throw new BaseException(INVALID_Category);
         }
         return Arrays.stream(values())
                 .filter(c -> c.name().equalsIgnoreCase(input) || c.label.equalsIgnoreCase(input))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 카테고리: " + input));
+                .orElseThrow(() -> new BaseException(INVALID_Category));
     }
 
 }

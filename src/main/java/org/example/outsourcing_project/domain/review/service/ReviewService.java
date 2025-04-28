@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,10 @@ public class ReviewService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_ORDER_ID));
 
-        User user = userRepository.findById(order.getUserId()).orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_USER_ID));
+        if (order.getUser() == null) {
+            throw new BaseException(ErrorCode.NOT_FOUND_USER_ID);
+        }
+        User user = order.getUser();
 
         //현재 로그인된 유저와 주문의 유저가 같다면 리뷰 저장
         if(currentUserId.equals(user.getId()) && order.getStatus() == OrderStatus.DELIVERED){
@@ -66,7 +70,10 @@ public class ReviewService {
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_REVIEW_ID));
 
         Order order = review.getOrder();
-        User user = userRepository.findById(order.getUserId()).orElseThrow();
+        if (order.getUser() == null) {
+            throw new BaseException(ErrorCode.NOT_FOUND_USER_ID);
+        }
+        User user = order.getUser();
 
         if(currentUserId.equals(user.getId())){
             if(requestDto.getStars() != null){
@@ -86,7 +93,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_REVIEW_ID));
 
-        if(currentUserId.equals(review.getOrder().getUserId())){
+        if(currentUserId.equals(review.getOrder().getUser().getId())){
             reviewRepository.delete(review);
         } else {
             throw new BaseException(ErrorCode.FORBIDDEN_DELETE_REVIEW);
@@ -94,13 +101,14 @@ public class ReviewService {
     }
 
     private ReviewResponseDto buildReviewResponseDto(Review review, User user, Order order) {
+
         return ReviewResponseDto.builder()
-                .contents(review.getContents())
-                .stars(review.getStars())
-                .userName(user.getName())
-                .createdAt(review.getCreatedAt())
-                .updatedAt(review.getUpdatedAt())
-                .menuName(menuRepository.findById(order.getMenuId()).getMenuName())
-                .build();
+            .contents(review.getContents())
+            .stars(review.getStars())
+            .userName(user.getName())
+            .createdAt(review.getCreatedAt())
+            .updatedAt(review.getUpdatedAt())
+            .menuName(order.getMenu().getName())
+            .build();
     }
 }

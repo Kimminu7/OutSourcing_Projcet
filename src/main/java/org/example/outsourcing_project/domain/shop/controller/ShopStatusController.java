@@ -3,6 +3,8 @@ package org.example.outsourcing_project.domain.shop.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.outsourcing_project.common.jwt.LoginUser;
+import org.example.outsourcing_project.domain.shop.service.ShopService;
+import org.example.outsourcing_project.domain.shop.service.ShopStatusService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ShopStatusController {
 
-    private final ShopStatusController shopStatusController;
+    private final ShopStatusService shopStatusService;
 
     @PatchMapping("/{shopId}/open")
     public ResponseEntity<Void> openShop(
             @LoginUser Long userId,
             @PathVariable Long shopId) {
 
-        shopStatusController.openShop(shopId,userId);
+        shopStatusService.openShop(shopId,userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -28,7 +30,7 @@ public class ShopStatusController {
             @LoginUser Long userId,
             @PathVariable Long shopId) {
 
-        shopStatusController.closeShop(shopId,userId);
+        shopStatusService.closeShop(shopId,userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

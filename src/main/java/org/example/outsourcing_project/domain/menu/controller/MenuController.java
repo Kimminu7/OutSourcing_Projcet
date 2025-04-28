@@ -2,6 +2,7 @@ package org.example.outsourcing_project.domain.menu.controller;
 
 import java.util.List;
 
+import org.example.outsourcing_project.common.jwt.LoginUser;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuCreateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.request.MenuUpdateRequestDto;
 import org.example.outsourcing_project.domain.menu.dto.response.MenuCreateResponseDto;
@@ -31,50 +32,50 @@ public class MenuController {
 
 	private final MenuService menuService;
 
+	// 메뉴 등록
 	@PostMapping("/menus")
 	public ResponseEntity<MenuCreateResponseDto> createMenu(
 		@PathVariable Long shopId,
+		@LoginUser Long userId,
 		@RequestBody @Valid MenuCreateRequestDto requestDto) {
 
-		// TODO test를 위해 userId 하드코딩으로 나중에 수정 필요
-		Long userId = 1L;
 		MenuCreateResponseDto menuCreateResponseDto = menuService.createMenu(userId, shopId, requestDto);
 
 		return new ResponseEntity<>(menuCreateResponseDto, HttpStatus.OK);
 	}
 
+	// 메뉴 단건 조회
 	@GetMapping("/menus/{menuId}")
 	public ResponseEntity<MenuResponseDto> menuInfo(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId
 	){
-		// TODO test를 위해 userId 하드코딩으로 나중에 수정 필요
-		Long userId = 1L;
-		MenuResponseDto menuResponseDto = menuService.getMenuByShop(userId, shopId, menuId);
+
+		MenuResponseDto menuResponseDto = menuService.getMenuByShop(shopId,menuId);
 
 		return new ResponseEntity<>(menuResponseDto,HttpStatus.OK);
 	}
 
+	// 메뉴 수정
 	@PatchMapping("/menus/{menuId}")
 	public ResponseEntity<MenuUpdateResponseDto> updateMenu(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
+		@LoginUser Long userId,
 		@RequestBody @Valid MenuUpdateRequestDto requestDto) {
 
-		// TODO test를 위해 userId 하드코딩으로 나중에 수정 필요
-		Long userId = 1L;
 		MenuUpdateResponseDto menuUpdateResponseDto = menuService.updateMenu(userId, shopId, menuId, requestDto);
 
 		return new ResponseEntity<>(menuUpdateResponseDto, HttpStatus.OK);
 	}
 
+	// 메뉴 삭제
 	@DeleteMapping("/menus/{menuId}")
 	public ResponseEntity<Void> deletMenu(
 		@PathVariable Long shopId,
+		@LoginUser Long userId,
 		@PathVariable Long menuId) {
 
-		// TODO test를 위해 userId 하드코딩으로 나중에 수정 필요
-		Long userId = 1L;
 		menuService.deleteMenu(userId, shopId, menuId);
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

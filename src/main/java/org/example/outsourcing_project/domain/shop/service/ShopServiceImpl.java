@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.outsourcing_project.common.config.PasswordEncoder;
 import org.example.outsourcing_project.common.enums.Category;
 import org.example.outsourcing_project.common.enums.ShopDayOfWeek;
+import org.example.outsourcing_project.common.exception.ErrorCode;
+import org.example.outsourcing_project.common.exception.custom.BaseException;
 import org.example.outsourcing_project.domain.menu.entity.Menu;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopDeleteRequestDto;
 import org.example.outsourcing_project.domain.shop.dto.request.ShopPatchRequestDto;
@@ -13,7 +15,11 @@ import org.example.outsourcing_project.domain.shop.dto.response.ShopResponseDto;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopWithMenuResponse;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
 import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
+import org.example.outsourcing_project.domain.shop.exception.ForbiddenOwner;
+import org.example.outsourcing_project.domain.shop.exception.ForbiddenOwnerCount;
+import org.example.outsourcing_project.domain.shop.exception.UnauthorizedOwner;
 import org.example.outsourcing_project.domain.shop.repository.ShopRepository;
+import org.example.outsourcing_project.domain.user.UserRole;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.example.outsourcing_project.domain.user.repository.UserRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -38,8 +44,12 @@ public class ShopServiceImpl implements ShopService {
     public ShopResponseDto saveShop(Long userid, ShopRequestDto requestDto) {
         User user=userRepository.findByIdOrElseThrow(userid);
 
+        if (user.getRole()!= UserRole.OWNER){
+            throw new UnauthorizedOwner();
+        }
+
         if (shopRepository.countShopByUserId(userid)>=3){
-            throw new RuntimeException("부자 사장님");
+            throw new ForbiddenOwnerCount();
         }
         Shop shop=requestDto.toEntity(user);
         Shop saveshop=shopRepository.save(shop);
@@ -81,7 +91,7 @@ public class ShopServiceImpl implements ShopService {
         Shop shop=shopRepository.findByIdWithUserThrowException(shopId);
 
         if (!shop.getUser().getId().equals(userId)){
-            throw new RuntimeException("가게 사장이 아닙니다");
+            throw new ForbiddenOwner();
         }
 
         shop.update(shopPatchRequestDto);
@@ -94,11 +104,11 @@ public class ShopServiceImpl implements ShopService {
         Shop shop = shopRepository.findByIdWithUserThrowException(shopId);
 
         if (!shop.getUser().getId().equals(userId)) {
-            throw new RuntimeException("가게 사장이 아닙니다");
+            throw new ForbiddenOwner();
         }
         if (!passwordEncoder.matches(shopDeleteRequestDto.getPassword(), shop.getUser().getPassword())){
 
-            throw new RuntimeException("비밀번호가 일치하지 않습니다");
+            throw new BaseException(ErrorCode.INVALID_PASSWORD);
         }
 
         shopRepository.deleteById(shopId);

@@ -8,6 +8,10 @@ import org.example.outsourcing_project.domain.menu.entity.Menu;
 import org.example.outsourcing_project.domain.menu.entity.MenuOption;
 import org.example.outsourcing_project.domain.menu.repository.MenuOptionRepository;
 import org.example.outsourcing_project.domain.menu.repository.MenuRepository;
+import org.example.outsourcing_project.domain.shop.entity.Shop;
+import org.example.outsourcing_project.domain.user.UserRole;
+import org.example.outsourcing_project.domain.user.entity.User;
+import org.example.outsourcing_project.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +23,17 @@ public class MenuOptionServiceImpl implements MenuOptionService {
 
 	private final MenuOptionRepository menuOptionRepository;
 	private final MenuRepository menuRepository;
+	private final UserRepository userRepository;
 
 	@Override
-	public MenuOptionResponseDto createOption(Long shopId, Long menuId, MenuOptionRequestDto dto) {
+	public MenuOptionResponseDto createOption(Long shopId,Long userId, Long menuId, MenuOptionRequestDto dto) {
 
-		Menu menu = menuRepository.findByIdAndShop_id(menuId,shopId)
+		User user = userRepository.findByIdOrElseThrow(userId);
+		Menu menu = menuRepository.findByIdAndShopId(menuId,shopId)
 			.orElseThrow(()-> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
+
+		validateOwner(user,menu);
+
 
 		MenuOption menuOption = new MenuOption(menu,dto);
 
@@ -35,9 +44,9 @@ public class MenuOptionServiceImpl implements MenuOptionService {
 
 	@Override
 	@Transactional
-	public MenuOptionUpdateResponseDto updateOption(Long shopId, Long menuId, Long optionId, MenuOptionUpdateRequestDto dto) {
+	public MenuOptionUpdateResponseDto updateOption(Long shopId, Long userId, Long menuId, Long optionId, MenuOptionUpdateRequestDto dto) {
 
-		Menu menu = menuRepository.findByIdAndShop_id(menuId,shopId)
+		Menu menu = menuRepository.findByIdAndShopId(menuId,shopId)
 			.orElseThrow(()-> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		MenuOption menuOption = menuOptionRepository.findById(optionId)
@@ -54,9 +63,9 @@ public class MenuOptionServiceImpl implements MenuOptionService {
 
 	@Override
 	@Transactional
-	public void deleteOption(Long shopId, Long menuId, Long optionId) {
+	public void deleteOption(Long shopId, Long userId, Long menuId, Long optionId) {
 
-		Menu menu = menuRepository.findByIdAndShop_id(menuId,shopId)
+		Menu menu = menuRepository.findByIdAndShopId(menuId,shopId)
 			.orElseThrow(()-> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
 		MenuOption menuOption = menuOptionRepository.findById(optionId)
@@ -71,5 +80,11 @@ public class MenuOptionServiceImpl implements MenuOptionService {
 		}
 
 		menuOption.softDelete();
+	}
+
+	private void validateOwner(User user, Menu menu) {
+		if (!menu.getId().equals(menu.getId()) || user.getRole() != UserRole.OWNER) {
+			throw new IllegalArgumentException("권한이 없습니다.");
+		}
 	}
 }
