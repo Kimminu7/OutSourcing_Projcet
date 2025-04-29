@@ -25,10 +25,10 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
 
     //즐겨찾기용
     @Query("SELECT s FROM Shop s WHERE s.id = :shopId AND s.shopStatus != 'CLOSED_PERMANENTLY'")
-    Optional<Shop> findById(@Param("shopId")Long shopId);
+    Optional<Shop> findActiveShopById(@Param("shopId")Long shopId);
 
-    default Shop findByIdThrowException(Long shopId) {
-        return findById(shopId).orElseThrow(RuntimeException::new);
+    default Shop findActiveShopByIdThrowException(Long shopId) {
+        return findActiveShopById(shopId).orElseThrow(RuntimeException::new);
     }
 
     //카테고리 조회
@@ -44,4 +44,8 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
 
     @Query("SELECT count(s.id) FROM Shop s WHERE s.user.id = :userId AND s.shopStatus != 'CLOSED_PERMANENTLY'")
     int countShopByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT s FROM Shop s LEFT JOIN FETCH s.user WHERE s.id = :shopId AND s.shopStatus != 'CLOSED_PERMANENTLY'")
+    Optional<Shop> findActiveShopByIdWithUser(@Param("shopId") Long shopId);
+
 }

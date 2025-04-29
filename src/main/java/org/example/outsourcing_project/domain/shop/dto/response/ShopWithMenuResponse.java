@@ -21,8 +21,11 @@ public class ShopWithMenuResponse {
     private long minDeliverPrice;
     private List<MenuItem> menus;
 
+
     public static class MenuItem {
+        @Getter
         private String menuName;
+        @Getter
         private int price;
 
         public MenuItem(String menuName, int price){

@@ -6,6 +6,7 @@ import org.example.outsourcing_project.common.exception.custom.BaseException;
 import org.example.outsourcing_project.domain.order.entity.Order;
 import org.example.outsourcing_project.domain.order.entity.OrderStatus;
 import org.example.outsourcing_project.domain.order.repository.OrderRepository;
+import org.example.outsourcing_project.domain.order.service.OrderService;
 import org.example.outsourcing_project.domain.shop.dto.response.ShopDeliveryResponseDto;
 import org.example.outsourcing_project.domain.shop.entity.Shop;
 import org.example.outsourcing_project.domain.shop.exception.ForbiddenOwner;
@@ -23,6 +24,7 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
 
     private final OrderRepository orderRepository;
     private final ShopRepository shopRepository;
+    private final OrderService orderService;
 
     @Override
     @Transactional
@@ -91,7 +93,7 @@ public class ShopDeliveryServiceImpl implements ShopDeliveryService {
     }
 
     private void validateShop(Long userId, Long shopId) {
-        Shop shop = shopRepository.findByIdThrowException(shopId);
+        Shop shop = shopRepository.findActiveShopByIdThrowException(shopId);
         if (!shop.getUser().getId().equals(userId)) {
             throw new ForbiddenOwner();
         }

@@ -23,7 +23,7 @@ public class ShopStatusScheduler {
     private final ShopRepository shopRepository;
 
     @Transactional
-    @Scheduled(cron = "0 10 * * * *") // 매시 10분
+    @Scheduled(cron = "0 1 * * * *") // 매시 10분
     public void updateShopStars() {
         List<Shop> shops = shopRepository.findAll();
         for (Shop shop : shops) {
