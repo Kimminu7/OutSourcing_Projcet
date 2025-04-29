@@ -36,31 +36,72 @@
 ## 📂 프로젝트 구조
 
 ```
-org.example.outsourcing_project
-├── common                  # 공통 응답 (ApiResponse, ResponseCode 등)
-├── config                  # 설정 파일 (JPA Auditing, JWT 등)
-├── controller              # API 진입 지점 (User, Shop, Menu, Order, Review)
-├── converter               # DTO ↔️ Entity 변환기
-├── domain                  # JPA 엔티티
-│   ├── user
-│   ├── shop
-│   ├── menu
-│   ├── order
-│   ├── review
-├── dto                     # 요청/응답 DTO
-│   ├── user
-│   ├── shop
-│   ├── menu
-│   ├── order
-│   ├── review
-├── enums                   # 공통 ENUM 타입 (Category, OrderStatus, DayOfWeek 등)
-├── exception               # 공통 및 도메인별 커스텀 예외
-│   ├── user / shop / menu / order / review
-├── filter                  # JWT 인증 필터
-├── jwt                     # JWT 발급 및 검증 유틸리티
-├── log                     # 주문 상태 변경 AOP 로깅 기능
-├── repository              # JPA 인터페이스
-└── service                 # 비즈니스 로직 처리
+
+└─outsourcing_project
+    ├─common    # 공통 응답 (ApiResponse, ResponseCode 등)
+    │  ├─cash      
+    │  ├─config    # 설정 파일 (JPA Auditing, JWT 등)
+    │  ├─converter       # DTO ↔️ Entity 변환기
+    │  ├─entity     # 공통 엔티티 
+    │  ├─enums   # 공통 ENUM 타입 (Category, OrderStatus, DayOfWeek 등)
+    │  ├─exception      # 공통 및 도메인별 커스텀 예외
+    │  │  └─custom
+    │  ├─filter       # JWT 인증 필터
+    │  └─jwt          # JWT 발급 및 검증 유틸리티
+    └─domain
+        ├─auth
+        │  ├─controller  # API 진입 지점 (User, Shop, Menu, Order, Review)
+        │  ├─dto             # 요청/응답 DTO
+        │  └─service      # 비즈니스 로직 처리
+        ├─favorite
+        │  ├─controller
+        │  ├─Dto
+        │  ├─entity
+        │  ├─repository  # JPA 인터페이스
+        │  └─service
+        ├─menu
+        │  ├─controller
+        │  ├─dto
+        │  │  ├─request
+        │  │  └─response
+        │  ├─entity
+        │  ├─repository
+        │  └─service
+        ├─order
+        │  ├─controller
+        │  ├─dto
+        │  │  ├─request
+        │  │  └─response
+        │  ├─entity
+        │  ├─log           # 주문 상태 변경 AOP 로깅 기능
+        │  ├─repository
+        │  └─service
+        ├─review
+        │  ├─controller
+        │  ├─dto
+        │  │  ├─request
+        │  │  └─response
+        │  ├─entity
+        │  ├─repository
+        │  └─service
+        ├─shop
+        │  ├─controller
+        │  ├─dto
+        │  │  ├─request
+        │  │  └─response
+        │  ├─entity
+        │  ├─enums
+        │  ├─exception
+        │  ├─repository
+        │  └─service
+        └─user
+            ├─controller
+            ├─dto
+            │  ├─request
+            │  └─response
+            ├─entity
+            ├─repository
+            └─service
 
 ```
 
