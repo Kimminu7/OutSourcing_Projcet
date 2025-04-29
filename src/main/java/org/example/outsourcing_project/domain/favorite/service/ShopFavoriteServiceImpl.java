@@ -26,7 +26,7 @@ public class ShopFavoriteServiceImpl implements ShopFavoriteService {
     @Override
     public void like(Long userId, Long shopId) {
 
-        Shop shop = shopRepository.findByIdThrowException(shopId);
+        Shop shop = shopRepository.findActiveShopByIdThrowException(shopId);
         User user = userRepository.findByIdOrElseThrow(userId);
 
         Favorites favorites = Favorites.of(user, shop);

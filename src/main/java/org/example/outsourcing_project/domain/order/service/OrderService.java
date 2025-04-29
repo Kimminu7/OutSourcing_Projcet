@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.outsourcing_project.domain.menu.entity.Menu;
 import org.example.outsourcing_project.domain.menu.repository.MenuRepository;
 import org.example.outsourcing_project.domain.order.dto.request.OrderCreateRequest;
-import org.example.outsourcing_project.domain.order.dto.request.OrderMenuCreateRequest;
 import org.example.outsourcing_project.domain.order.dto.request.OrderStatusUpdateRequest;
 import org.example.outsourcing_project.domain.order.dto.response.OrderResponse;
 import org.example.outsourcing_project.domain.order.dto.response.OrderStatusLogResponse;
 import org.example.outsourcing_project.domain.order.entity.Order;
-import org.example.outsourcing_project.domain.order.entity.OrderMenu;
 import org.example.outsourcing_project.domain.order.entity.OrderStatus;
 import org.example.outsourcing_project.domain.order.entity.OrderStatusLog;
 import org.example.outsourcing_project.domain.order.repository.OrderRepository;
@@ -44,7 +42,7 @@ public class OrderService {
 		Menu firstMenu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴입니다."));
 
-		Shop shop = shopRepository.findByIdThrowException(firstMenu.getShop().getId());
+		Shop shop = shopRepository.findActiveShopByIdThrowException(firstMenu.getShop().getId());
 
 		// 가게 상태 확인
 		if (shopService.calculateCurrentStatus(shop.getId(),LocalDateTime.now())!= ShopStatus.OPEN&&shop.getShopStatusAuth()== ShopStatusAuth.AUTO){

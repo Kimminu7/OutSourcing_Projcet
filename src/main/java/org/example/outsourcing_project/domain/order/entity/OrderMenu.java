@@ -31,8 +31,18 @@ public class OrderMenu {
     @Column(nullable = false)
     private Integer price; // 단가 * 수량 결과
 
-    // 편의 메소드
+    // Order 세팅 편의 메서드
     public void setOrder(Order order) {
         this.order = order;
     }
+
+    // 가격 자동 계산을 위한 생성자
+    @Builder
+    public OrderMenu(Order order, Long menuId, Integer quantity, Integer menuPrice) {
+        this.order = order;
+        this.menuId = menuId;
+        this.quantity = quantity;
+        this.price = menuPrice * quantity;
+    }
 }
+
