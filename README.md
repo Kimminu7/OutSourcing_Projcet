@@ -6,13 +6,13 @@
 
 ---
 
-## API 명세서
+## 📃 API 명세서
 
 <a href="https://www.notion.so/teamsparta/S-A-1dd2dc3ef51480148065d5db9b3040b1"> API 명세서 보러가기 ( 중하단에 위치 ) </a>
 
 ---
 
-## 📃 ERD
+## 📅 ERD
 
 ![아웃소싱 ERD (2)](https://github.com/user-attachments/assets/2d2e2f1b-6aaa-438d-91fb-4ec2bae773a3)
 
