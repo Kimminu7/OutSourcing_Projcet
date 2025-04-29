@@ -17,6 +17,7 @@ import org.example.outsourcing_project.domain.shop.entity.Shop;
 import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
 import org.example.outsourcing_project.domain.shop.exception.ForbiddenOwner;
 import org.example.outsourcing_project.domain.shop.exception.ForbiddenOwnerCount;
+import org.example.outsourcing_project.domain.shop.exception.NotFoundShop;
 import org.example.outsourcing_project.domain.shop.exception.UnauthorizedOwner;
 import org.example.outsourcing_project.domain.shop.repository.ShopRepository;
 import org.example.outsourcing_project.domain.user.UserRole;
@@ -101,7 +102,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public void deleteShop(Long shopId, Long userId, ShopDeleteRequestDto shopDeleteRequestDto) {
-        Shop shop = shopRepository.findByIdWithUserThrowException(shopId);
+        Shop shop = shopRepository.findActiveShopByIdWithUser(shopId).orElseThrow(NotFoundShop::new);
 
         if (!shop.getUser().getId().equals(userId)) {
             throw new ForbiddenOwner();
@@ -120,7 +121,7 @@ public class ShopServiceImpl implements ShopService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public ShopStatus calculateCurrentStatus(Long shopId, LocalDateTime dateTime) {
 
-        Shop shop=shopRepository.findByIdThrowException(shopId);
+        Shop shop=shopRepository.findActiveShopByIdThrowException(shopId);
 
         // 고정 상태는 그대로 반환
         if (shop.getShopStatus() == ShopStatus.CLOSED_PERMANENTLY || shop.getShopStatus() == ShopStatus.PENDING) {
@@ -128,7 +129,7 @@ public class ShopServiceImpl implements ShopService {
         }
 
         List<ShopDayOfWeek> closedDays = shop.getClosedDays();
-        if (closedDays == null || closedDays.isEmpty()) return ShopStatus.PENDING;
+        if (closedDays == null ) return ShopStatus.PENDING;
 
         LocalTime now = dateTime.toLocalTime();
         LocalDate todayDate = dateTime.toLocalDate();

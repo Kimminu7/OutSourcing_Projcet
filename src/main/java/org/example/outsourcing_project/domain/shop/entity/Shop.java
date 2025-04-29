@@ -14,6 +14,8 @@ import org.example.outsourcing_project.domain.shop.enums.ShopStatus;
 import org.example.outsourcing_project.domain.shop.enums.ShopStatusAuth;
 import org.example.outsourcing_project.domain.user.entity.User;
 import org.hibernate.annotations.SQLDelete;
+
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "shop")
-@SQLDelete(sql = "UPDATE shop SET shop_status = 'CLOSED_PERMANENTLY' WHERE shop_id = ?")//소프트
+@SQLDelete(sql = "UPDATE shop SET shop_status = 'CLOSED_PERMANENTLY' WHERE id = ?")//소프트
 
 public class Shop extends BaseTimeEntity {
     @Id
@@ -97,5 +99,11 @@ public class Shop extends BaseTimeEntity {
         this.shopStatus = status;
         this.shopStatusAuth=auth;
     }
-
+    //테스트용
+    public void addMenu(Menu menu){
+        this.menus.add(menu);
+    }
+    //테스트용
+    public void setOperatingHours(LocalTime openTime, LocalTime closeTime) {
+    }
 }
