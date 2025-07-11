@@ -27,8 +27,8 @@
 | ORM | Spring Data JPA |
 | DB | MySQL |
 | Build Tool | Gradle |
-| 인증 | JWT 기반 인증 (AccessToken 사용) |
-| 테스트 | IntelliJ HTTP Client (.http 파일) |
+| 인증 | JWT |
+| 테스트 | IntelliJ HTTP Client (.http 파일), PostMan |
 | 기타 | JPA Auditing, Soft Delete, AOP, 커스텀 예외 처리 등 |
 
 ---
