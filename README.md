@@ -28,7 +28,7 @@
 | DB | MySQL |
 | Build Tool | Gradle |
 | 인증 | JWT |
-| 테스트 | IntelliJ HTTP Client (.http 파일), PostMan |
+| 테스트 | PostMan, Junit5 |
 | 기타 | JPA Auditing, Soft Delete, AOP, 커스텀 예외 처리 등 |
 
 ---
